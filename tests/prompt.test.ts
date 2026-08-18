@@ -31,6 +31,8 @@ describe('toGeneratedPrompt', () => {
       attachments: [{ fileToken: 'fileA', name: 'image.png' }],
     });
 
+    expect(result.id).toBe('recvs8dvb0F3Js');
+    expect(result).not.toHaveProperty('recordId');
     expect(result.prompt).toBe('四宫格输出前、左、后、右四个正交视角。');
     expect(result.attachments).toEqual([
       '/generated/prompt-assets/recvs8dvb0f3js-0.png',

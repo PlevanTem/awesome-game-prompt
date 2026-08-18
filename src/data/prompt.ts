@@ -27,7 +27,7 @@ export function toGeneratedPrompt(record: BasePromptRecord): GeneratedPrompt {
   const assetRecordId = record.recordId.toLowerCase();
 
   return {
-    recordId: record.recordId,
+    id: record.recordId,
     slug: makeSlug(title, record.recordId),
     title,
     categories: record.categories,

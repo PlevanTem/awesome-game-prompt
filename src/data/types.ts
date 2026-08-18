@@ -12,7 +12,7 @@ export interface BasePromptRecord {
 }
 
 export interface GeneratedPrompt {
-  recordId: string;
+  id: string;
   slug: string;
   title: string;
   categories: string[];
