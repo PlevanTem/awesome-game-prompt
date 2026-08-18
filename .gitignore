@@ -1,5 +1,5 @@
 /.superpowers/
+/.worktrees/
 node_modules/
 dist/
 .astro/
-
