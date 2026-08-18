@@ -1,0 +1,21 @@
+{
+  "name": "prompt-forge",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "sync:feishu": "node scripts/sync-feishu.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "vitest": "^4.1.11"
+  }
+}
