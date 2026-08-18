@@ -1,0 +1,74 @@
+---
+import PromptGallery from '../../components/PromptGallery.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import type { GeneratedPrompt } from '../../data/types';
+import promptsData from '../../generated/prompts.json';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return (promptsData as GeneratedPrompt[]).map((prompt, promptIndex) => ({
+    params: { slug: prompt.slug },
+    props: { prompt, promptIndex },
+  }));
+}
+
+interface Props {
+  prompt: GeneratedPrompt;
+  promptIndex: number;
+  archivePrompts?: GeneratedPrompt[];
+}
+
+const { prompt, promptIndex, archivePrompts = promptsData } = Astro.props as Props;
+const configuredBase = process.env.BASE_PATH || '/';
+const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
+const previousPrompt = archivePrompts[promptIndex - 1];
+const nextPrompt = archivePrompts[promptIndex + 1];
+---
+
+<BaseLayout title={`${prompt.title} - Prompt Forge`}>
+  <SiteHeader />
+  <main class="prompt-detail">
+    <a class="prompt-detail__back" href={base}>BACK TO ARCHIVE</a>
+
+    <div class="prompt-detail__layout">
+      <PromptGallery title={prompt.title} attachments={prompt.attachments} />
+
+      <section class="prompt-detail__content" aria-labelledby="prompt-title">
+        <p class="prompt-detail__categories">{prompt.categories.join(' / ') || 'UNCATEGORIZED'}</p>
+        <h1 id="prompt-title">{prompt.title}</h1>
+
+        <div class="prompt-detail__prompt-header">
+          <h2>ORIGINAL PROMPT</h2>
+          <button class="prompt-detail__copy" type="button" data-copy-prompt>COPY PROMPT +</button>
+        </div>
+        <pre class="prompt-detail__prompt" data-prompt-text>{prompt.prompt}</pre>
+      </section>
+    </div>
+
+    {
+      (previousPrompt || nextPrompt) && (
+        <nav class="prompt-detail__neighbors" aria-label="Prompt navigation">
+          {previousPrompt ? (
+            <a href={`${base}prompt/${previousPrompt.slug}/`}>PREVIOUS: {previousPrompt.title}</a>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          {nextPrompt && <a href={`${base}prompt/${nextPrompt.slug}/`}>NEXT: {nextPrompt.title}</a>}
+        </nav>
+      )
+    }
+  </main>
+</BaseLayout>
+
+<script define:vars={{ promptText: prompt.prompt }}>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-prompt]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(promptText);
+        button.textContent = 'COPIED';
+      } catch {
+        button.textContent = 'SELECT TEXT';
+      }
+    });
+  });
+</script>

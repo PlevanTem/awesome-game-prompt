@@ -1,0 +1,63 @@
+---
+interface Props {
+  title: string;
+  attachments: string[];
+}
+
+const { title, attachments } = Astro.props;
+const configuredBase = process.env.BASE_PATH || '/';
+const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
+const images = attachments.map((attachment) => `${base}${attachment.replace(/^\//, '')}`);
+const imageId = 'prompt-gallery-image';
+---
+
+<section class="prompt-gallery" data-prompt-gallery>
+  {
+    images[0] ? (
+      <img id={imageId} class="prompt-gallery__image" src={images[0]} alt={title} />
+    ) : (
+      <div class="prompt-gallery__empty" aria-hidden="true">NO ATTACHMENT</div>
+    )
+  }
+
+  {
+    images.length > 1 && (
+      <div class="prompt-gallery__controls" role="group" aria-label="Attachment images">
+        {images.map((image, index) => (
+          <button
+            class="prompt-gallery__control"
+            type="button"
+            aria-label={`Show image ${index + 1}`}
+            aria-controls={imageId}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+            data-gallery-control
+            data-image-src={image}
+          >
+            <span aria-hidden="true">{index + 1}</span>
+          </button>
+        ))}
+      </div>
+    )
+  }
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-prompt-gallery]').forEach((gallery) => {
+    const image = gallery.querySelector<HTMLImageElement>('.prompt-gallery__image');
+    const controls = gallery.querySelectorAll<HTMLButtonElement>('[data-gallery-control]');
+
+    controls.forEach((control) => {
+      control.addEventListener('click', () => {
+        const source = control.dataset.imageSrc;
+
+        if (image && source) {
+          image.src = source;
+        }
+
+        controls.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button === control));
+        });
+      });
+    });
+  });
+</script>
