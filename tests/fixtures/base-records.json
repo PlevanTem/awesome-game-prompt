@@ -1,0 +1,11 @@
+[
+  {
+    "recordId": "recvs8dvb0F3Js",
+    "title": "经典四视图",
+    "categories": ["角色设计"],
+    "prompt": "四宫格输出前、左、后、右四个正交视角。",
+    "attachments": [
+      { "fileToken": "fileA", "name": "image.png" }
+    ]
+  }
+]
