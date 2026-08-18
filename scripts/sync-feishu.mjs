@@ -7,8 +7,7 @@ import {
   rm,
   writeFile,
 } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { dirname, extname, join } from 'node:path';
+import { dirname, extname, isAbsolute, join, relative, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { pathToFileURL } from 'node:url';
 
@@ -17,7 +16,7 @@ const execFileAsync = promisify(execFile);
 /** @typedef {{ fileToken: string, name: string }} BasePromptAttachment */
 /** @typedef {{ recordId: string, title: string, categories: string[], prompt: string, attachments: BasePromptAttachment[] }} BasePromptRecord */
 /** @typedef {{ id: string, slug: string, title: string, categories: string[], prompt: string, attachments: string[] }} GeneratedPrompt */
-/** @typedef {{ runner?: CommandRunner, outputDir?: string, dataFile?: string, environment?: NodeJS.ProcessEnv }} SyncOptions */
+/** @typedef {{ runner?: CommandRunner, outputDir?: string, dataFile?: string, environment?: NodeJS.ProcessEnv, remove?: typeof rm }} SyncOptions */
 /** @typedef {(command: string, args: string[]) => Promise<{ stdout: string, stderr: string }>} CommandRunner */
 
 const projectRoot = join(import.meta.dirname, '..');
@@ -28,9 +27,21 @@ function commandName() {
   return process.platform === 'win32' ? 'lark-cli.cmd' : 'lark-cli';
 }
 
+export function commandInvocation(command, args, platform = process.platform) {
+  if (platform === 'win32' && command.toLowerCase().endsWith('.cmd')) {
+    return {
+      executable: 'cmd.exe',
+      args: ['/d', '/s', '/c', command, ...args],
+    };
+  }
+
+  return { executable: command, args };
+}
+
 /** @type {CommandRunner} */
 async function runCommand(command, args) {
-  return execFileAsync(command, args, { encoding: 'utf8' });
+  const invocation = commandInvocation(command, args);
+  return execFileAsync(invocation.executable, invocation.args, { encoding: 'utf8' });
 }
 
 async function pathExists(path) {
@@ -155,7 +166,31 @@ function toGeneratedPrompt(record) {
   };
 }
 
-async function publish(stagingAssets, dataTempFile, outputDir, dataFile) {
+function attachmentDestination(stagingAssets, recordId, index, extension) {
+  const destination = resolve(
+    stagingAssets,
+    `${recordId.toLowerCase()}-${index}${extension}`,
+  );
+  const pathWithinStaging = relative(stagingAssets, destination);
+  if (
+    pathWithinStaging === '' ||
+    pathWithinStaging.startsWith('..') ||
+    isAbsolute(pathWithinStaging)
+  ) {
+    throw new Error('Attachment destination escapes staging directory');
+  }
+  return destination;
+}
+
+async function removeBackup(remove, path, options) {
+  try {
+    await remove(path, options);
+  } catch {
+    // Publication has completed; a leftover backup is recoverable and non-fatal.
+  }
+}
+
+async function publish(stagingAssets, dataTempFile, outputDir, dataFile, remove) {
   const assetsDirectory = join(outputDir, 'prompt-assets');
   const assetBackup = join(outputDir, `.prompt-assets-backup-${Date.now()}`);
   const dataBackup = join(dirname(dataFile), `.prompts-backup-${Date.now()}.json`);
@@ -194,8 +229,8 @@ async function publish(stagingAssets, dataTempFile, outputDir, dataFile) {
     throw error;
   }
 
-  await rm(assetBackup, { force: true, recursive: true });
-  await rm(dataBackup, { force: true });
+  await removeBackup(remove, assetBackup, { force: true, recursive: true });
+  await removeBackup(remove, dataBackup, { force: true });
 }
 
 /** @returns {Promise<GeneratedPrompt[]>} */
@@ -204,6 +239,7 @@ export async function syncBase(options = {}) {
   const baseToken = requiredEnvironment(environment, 'FEISHU_BASE_TOKEN');
   const tableId = requiredEnvironment(environment, 'FEISHU_TABLE_ID');
   const runner = options.runner ?? runCommand;
+  const remove = options.remove ?? rm;
   const outputDir = options.outputDir ?? defaultOutputDir;
   const dataFile = options.dataFile ?? defaultDataFile;
 
@@ -243,9 +279,11 @@ export async function syncBase(options = {}) {
       for (let index = 0; index < record.attachments.length; index += 1) {
         const attachment = record.attachments[index];
         const extension = extname(attachment.name).toLowerCase() || '.bin';
-        const destination = join(
+        const destination = attachmentDestination(
           stagingAssets,
-          `${record.recordId.toLowerCase()}-${index}${extension}`,
+          record.recordId,
+          index,
+          extension,
         );
         try {
           await runner(commandName(), [
@@ -274,7 +312,7 @@ export async function syncBase(options = {}) {
     }
 
     await writeFile(dataTempFile, `${JSON.stringify(prompts, null, 2)}\n`, 'utf8');
-    await publish(stagingAssets, dataTempFile, outputDir, dataFile);
+    await publish(stagingAssets, dataTempFile, outputDir, dataFile, remove);
     return prompts;
   } finally {
     await rm(stagingAssets, { force: true, recursive: true });
