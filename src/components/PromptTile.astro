@@ -1,0 +1,48 @@
+---
+import { categoryLabels } from '../data/categories';
+import type { GeneratedPrompt } from '../data/types';
+
+interface Props {
+  prompt: GeneratedPrompt;
+  index: number;
+}
+
+const { prompt, index } = Astro.props;
+const configuredBase = process.env.BASE_PATH || '/';
+const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
+const primaryCategory = prompt.categories[0];
+const categoryLabel = primaryCategory
+  ? categoryLabels[primaryCategory]
+    ? `${categoryLabels[primaryCategory]} / ${primaryCategory}`
+    : primaryCategory
+  : 'UNCATEGORIZED';
+const firstAttachment = prompt.attachments[0];
+const assetSource = firstAttachment
+  ? `${base}${firstAttachment.replace(/^\//, '')}`
+  : undefined;
+const sequence = String(index + 1).padStart(3, '0');
+const layout = index % 5 === 0 ? 'prompt-tile--wide' : index % 5 === 3 ? 'prompt-tile--square' : '';
+---
+
+<article
+  class:list={['prompt-tile', layout]}
+  data-prompt-tile
+  data-categories={prompt.categories.join('|')}
+  data-category={primaryCategory}
+>
+  <a class="prompt-tile__link" href={`${base}prompt/${prompt.slug}/`}>
+    {assetSource ? (
+      <img class="prompt-tile__image" src={assetSource} alt={prompt.title} loading="lazy" />
+    ) : (
+      <div class="prompt-tile__fallback" aria-hidden="true">
+        <span>{categoryLabel}</span>
+        <strong>{prompt.title}</strong>
+      </div>
+    )}
+    <span class="prompt-tile__meta">
+      <span>{sequence}</span>
+      <span>{categoryLabel}</span>
+    </span>
+    <strong class="prompt-tile__title">{prompt.title}</strong>
+  </a>
+</article>

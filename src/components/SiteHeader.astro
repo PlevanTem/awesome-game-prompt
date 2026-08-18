@@ -1,0 +1,13 @@
+---
+const configuredBase = process.env.BASE_PATH || '/';
+const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
+---
+
+<header class="site-header">
+  <a class="site-header__mark" href={base}>PROMPT FORGE / 001</a>
+  <nav class="site-header__nav" aria-label="Primary navigation">
+    <a href={base}>ARCHIVE</a>
+    <a href={`${base}about/`}>ABOUT</a>
+  </nav>
+  <p class="site-header__language">EN / 中文</p>
+</header>

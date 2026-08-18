@@ -1,5 +1,32 @@
 ---
-import '../styles/global.css';
+import ArchiveControls from '../components/ArchiveControls.astro';
+import PromptTile from '../components/PromptTile.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import type { GeneratedPrompt } from '../data/types';
+import promptsData from '../generated/prompts.json';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const archivePrompts = (Astro.props.prompts ?? promptsData) as GeneratedPrompt[];
 ---
 
-<h1>Prompt Forge</h1>
+<BaseLayout title="Prompt Forge - Game Art Prompts">
+  <SiteHeader />
+  <main class="archive-index">
+    <div class="archive-index__heading">
+      <p class="archive-index__eyebrow">PRODUCTION INDEX / 001</p>
+      <h1>GAME ART PROMPTS, INDEXED.</h1>
+    </div>
+
+    <ArchiveControls promptCount={archivePrompts.length} />
+
+    {
+      archivePrompts.length > 0 ? (
+        <section class="prompt-grid" aria-label="Prompt archive">
+          {archivePrompts.map((prompt, index) => <PromptTile prompt={prompt} index={index} />)}
+        </section>
+      ) : (
+        <p class="archive-index__empty">NO PROMPTS INDEXED YET.</p>
+      )
+    }
+  </main>
+</BaseLayout>

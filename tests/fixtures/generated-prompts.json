@@ -1,0 +1,10 @@
+[
+  {
+    "id": "recvs8dvb0F3Js",
+    "slug": "prompt-b0f3js",
+    "title": "经典四视图",
+    "categories": ["角色设计"],
+    "prompt": "四宫格输出前、左、后、右四个正交视角。",
+    "attachments": ["/generated/prompt-assets/recvs8dvb0f3js-0.png"]
+  }
+]

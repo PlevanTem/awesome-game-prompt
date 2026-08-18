@@ -1,0 +1,92 @@
+---
+import { categoryLabels } from '../data/categories';
+
+interface Props {
+  promptCount: number;
+}
+
+const { promptCount } = Astro.props;
+const filters = [
+  { category: 'all', label: 'ALL' },
+  { category: '角色设计', label: 'CHARACTERS', chinese: '角色设计' },
+  { category: '场景设计', label: 'ENVIRONMENTS', chinese: '场景设计' },
+  { category: '原画设计', label: 'CONCEPT ART', chinese: '原画设计' },
+  { category: 'UI/UX 美术', label: 'UI / UX', chinese: 'UI/UX 美术' },
+  { category: '动画与特效', label: 'VFX', chinese: '动画与特效' },
+  { category: '3D建模/贴图/渲染', label: '3D', chinese: '3D建模/贴图/渲染' },
+] as const;
+
+const knownCategories = new Set(Object.keys(categoryLabels));
+---
+
+<div class="archive-controls" aria-label="Archive controls">
+  <div class="archive-controls__filters" aria-label="Prompt categories">
+    {
+      filters.map((filter) => (
+        <button
+          type="button"
+          class="archive-controls__filter"
+          data-category={filter.category}
+          aria-pressed={filter.category === 'all' ? 'true' : 'false'}
+          aria-label={filter.label}
+        >
+          <span>{filter.label}</span>
+          {filter.chinese && knownCategories.has(filter.category) && (
+            <small lang="zh-CN" aria-hidden="true">{filter.chinese}</small>
+          )}
+        </button>
+      ))
+    }
+  </div>
+  <button
+    type="button"
+    class="archive-controls__random"
+    data-random-prompt
+    disabled={promptCount === 0}
+  >
+    RANDOM PROMPT +
+  </button>
+</div>
+
+<script>
+  const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category]'));
+  const promptTiles = Array.from(document.querySelectorAll<HTMLElement>('[data-prompt-tile]'));
+  const randomButton = document.querySelector<HTMLButtonElement>('[data-random-prompt]');
+
+  const updateRandomButton = () => {
+    if (randomButton) {
+      randomButton.disabled = !promptTiles.some((tile) => !tile.hidden);
+    }
+  };
+
+  for (const button of filterButtons) {
+    button.addEventListener('click', () => {
+      const selectedCategory = button.dataset.category ?? 'all';
+
+      for (const tile of promptTiles) {
+        const categories = (tile.dataset.categories ?? '').split('|').filter(Boolean);
+        tile.hidden = selectedCategory !== 'all' && !categories.includes(selectedCategory);
+      }
+
+      for (const control of filterButtons) {
+        control.setAttribute('aria-pressed', String(control === button));
+      }
+
+      updateRandomButton();
+    });
+  }
+
+  randomButton?.addEventListener('click', () => {
+    const visibleLinks = promptTiles
+      .filter((tile) => !tile.hidden)
+      .map((tile) => tile.querySelector<HTMLAnchorElement>('a[href]'))
+      .filter((link): link is HTMLAnchorElement => link !== null);
+    const selectedLink = visibleLinks[Math.floor(Math.random() * visibleLinks.length)];
+
+    if (selectedLink) {
+      window.location.href = selectedLink.href;
+    }
+  });
+
+  updateRandomButton();
+</script>
