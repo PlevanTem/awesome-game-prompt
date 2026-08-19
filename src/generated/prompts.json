@@ -1,1 +1,295 @@
-[]
+[
+  {
+    "id": "recvqrhguNf2tF",
+    "slug": "ui-unf2tf",
+    "title": "生成UI组件",
+    "categories": [
+      "UI/UX 美术"
+    ],
+    "prompt": "帮我生成图片：古风写实，武侠，玄幻，，场景组件，地砖，瀑布，山川，河流，湖泊，随机场景，游戏原画设计，10个模块化随机场景组件同框呈现，中心聚焦+对称式构图，严格45°等轴视角（水平旋转45°+垂直俯角30°），顶视图RPG Maker风格地图，比例4:3，纯绿色背景，8K分辨率（3840×2160），极致细节拉满，纹理精度拉满，边缘锐利，极繁主义，虚幻5渲染，次世代高模，3D模型转2D插画质感，细节强化开启，适配游戏场景地编需求。比例 4:3。比例 4:3。",
+    "attachments": [
+      "/generated/prompt-assets/recvqrhgunf2tf-0.png"
+    ]
+  },
+  {
+    "id": "recvqrhguN3HHI",
+    "slug": "ui-un3hhi",
+    "title": "生成UI界面",
+    "categories": [
+      "UI/UX 美术"
+    ],
+    "prompt": "模拟经营类独立游戏UI界面，偏独立游戏审美风格， 轻奇幻世界观，温馨而克制的幻想氛围， 整体色调以低饱和暖色与中性色为主， 辅以柔和点缀色，画面安静耐看， 画面为2D平视视角，细腻二次元插画风格， 手绘质感明显，笔触自然，有纸张与绘本感， 整体画面统一协调，具有独立游戏的艺术气质， 融合模拟经营与轻叙事元素， 界面采用模块化UI结构， 清晰划分信息区域与功能区域， 包含角色展示区、经营状态区、资源与数值区、 功能标签页与交互按钮区域， UI层级分明，信息易读，节奏舒缓， UI装饰以简约手绘纹样为主， 使用木质、布料、纸张等自然材质质感， 装饰克制，不堆叠复杂元素， 细节丰富但不过度抢视觉焦点， 文字区域预留合理空间， 适合后期替换文字与切图使用， 整体构图稳定，边缘干净， 高分辨率，高完成度，适合商业级独立游戏与个人网站使用， 非欧美卡通风格，非商业手游UI， 无大头Q版角色，无粗黑描边， 无高饱和色彩，无夸张透视",
+    "attachments": [
+      "/generated/prompt-assets/recvqrhgun3hhi-0.png"
+    ]
+  },
+  {
+    "id": "recvqrhguN2M9L",
+    "slug": "prompt-un2m9l",
+    "title": "生成场景概念",
+    "categories": [
+      "原画设计",
+      "场景设计"
+    ],
+    "prompt": "概念设计作品，photobash 作品，mattepainting， 环境艺术，游戏场景，高清画质，写实的场景，真实的质感，电影艺术，葫芦娃世界观，对马岛，中国古代农村，城市边缘，随意丢弃，俯视的画面，断崖边缘，拯救，故事感画面，人物对话，生命力，唯美的画面，破败的地面，光影神秘悬疑氛围，勾边光，夜晚，大气雾，浓烈雾气，强烈冷暖对比色调，上帝光，云层",
+    "attachments": [
+      "/generated/prompt-assets/recvqrhgun2m9l-0.png"
+    ]
+  },
+  {
+    "id": "recvqrkL5PyhF1",
+    "slug": "prompt-5pyhf1",
+    "title": "表情衍生",
+    "categories": [
+      "角色设计"
+    ],
+    "prompt": "Facial expression change FACS AU46\\n\\nFacial Action Coding System (FACS) List\\nFemale Character Reference Grid\\n\\n1. AU1 - Inner Brow Raiser\\n2. AU2 - Outer Brow Raiser\\n3. AU4 - Brow Lowerer\\n4. AU5 - Upper Lid Raiser\\n5. AU6 - Cheek Raiser\\n6. AU7 - Lid Tightener\\n7. AU9 - Nose Wrinkler\\n8. AU10 - Upper Lip Raiser\\n9. AU11 - Nasolabial Deepener\\n10. AU12 - Lip Corner Puller\\n11. AU13 - Sharp Lip Puller\\n12. AU14 - Dimpler\\n13. AU15 - Lip Corner Depressor\\n14. AU16 - Lower Lip Depressor\\n15. AU17 - Chin Raiser\\n16. AU18 - Lip Pucker\\n17. AU20 - Lip Stretcher\\n18. AU22 - Lip Funneler\\n19. AU23 - Lip Tightener\\n20. AU24 - Lip Pressor\\n21. AU25 - Lips Part\\n22. AU26 - Jaw Drop\\n23. AU27 - Mouth Stretch\\n24. AU28 - Lip Suck\\n25. AU41 - Lid Droop\\n26. AU42 - Slit Eyes\\n27. AU43 - Eyes Closed\\n28. AU44 - Squint\\n29. AU45 - Blink\\n30. AU46 - Wink\\n31. AU51 - Head Turn Left\\n32. AU52 - Head Turn Right\\n33. AU53 - Head Up\\n34. AU54 - Head Down\\n35. AU55 - Head Tilt Left\\n36. AU56 - Head Tilt Right\\n37. AU57 - Head Forward\\n38. AU58 - Head Back\\n39. AU61 - Eyes Turn Left\\n40. AU62 - Eyes Turn Right\\n41. AU63 - Eyes Up\\n42. AU64 - Eyes Down\\n43. AU71 - Brow Furrow\\n44. AU72 - Brow Bulge\\n45. AU81 - Chewing\\n46. AU82 - Nostril Dilator\\n47. AU83 - Nostril Compressor\\n48. AU84 - Tongue Up\\n49. AU85 - Tongue Out",
+    "attachments": [
+      "/generated/prompt-assets/recvqrkl5pyhf1-0.png"
+    ]
+  },
+  {
+    "id": "recvqrouENG3BK",
+    "slug": "ui-eng3bk",
+    "title": "英雄选择UI界面",
+    "categories": [
+      "UI/UX 美术"
+    ],
+    "prompt": "Design a polished game character screen around characters in reference image",
+    "attachments": [
+      "/generated/prompt-assets/recvqroueng3bk-0.png"
+    ]
+  },
+  {
+    "id": "recvqrqzajd0Va",
+    "slug": "character-sheet-ajd0va",
+    "title": "角色 character sheet",
+    "categories": [
+      "角色设计"
+    ],
+    "prompt": "Create a professional hand-drawn 2D anime character design sheet with English labels only.\n\nInclude:\n\nFull-body front, side, and back views\nThree facial expressions\nWeapon design and construction details\nElemental effects and movement language\nFour dynamic Sakuga key poses\nColor palette and material references\n\nKeep the character consistent across every view. Use expressive ink lines, clean shading, a clear silhouette, and an animation-friendly costume without excessive accessories.\n\nFor the fire warrior: compact youthful build, asymmetrical charred-red battlewear, a lotus-bud spear, and two separate fire wheels under both feet.\n\nFor the tide warrior: taller slender build, dark teal hair, subtle fin-like structures behind the ears, dark teal battlewear, and a dual-ended tide staff.",
+    "attachments": [
+      "/generated/prompt-assets/recvqrqzajd0va-0.png"
+    ]
+  },
+  {
+    "id": "recvqrqQrg7Vlq",
+    "slug": "prompt-rg7vlq",
+    "title": "黑白分镜故事板",
+    "categories": [
+      "角色设计",
+      "动画与特效"
+    ],
+    "prompt": "生成 3×3 黑白分镜草图，快速铺出镜头顺序与叙事节奏，用于前期沟通。\n创建一张 16:9 的 3×3 单色动作分镜图。\n使用粗略的黑白线稿，而不是完成度很高的插画。每个分镜都应清楚表现关键构图、人物位置、动作方向、镜头角度、视觉重点和场景变化。\n将分镜标注为 P01–P09，并分成 三个叙事段落（Story Phrases）。\n重点放在清晰的画面表达和连续的叙事推进。保持环境简洁，使用少量必要的线条和视觉提示，避免在每个分镜里填满复杂场景或大量细节特效。",
+    "attachments": [
+      "/generated/prompt-assets/recvqrqqrg7vlq-0.png"
+    ]
+  },
+  {
+    "id": "recvrjnFA31MZ3",
+    "slug": "dna-a31mz3",
+    "title": "风格DNA提取",
+    "categories": [
+      "原画设计",
+      "场景设计"
+    ],
+    "prompt": "请认真观察、总结、归纳提供的图片素材，提取该项目的风格: 并总结出我如果要将一个原画里的或者写实的物件，转换为该项目风格，我该用什么提示词。尽可能详细，以便能还原出当前的风格。",
+    "attachments": []
+  },
+  {
+    "id": "recvs8djXktmy5",
+    "slug": "prompt-xktmy5",
+    "title": "三视图+特写",
+    "categories": [
+      "角色设计",
+      "3D建模/贴图/渲染",
+      "场景设计"
+    ],
+    "prompt": "四格输出正面、侧面、背面加一处细节特写，一张图既看全造型又看清关键设计。\n基于参考图，按照以下要求生成三视图+特写视图。建议采用1:1比例或9:16比例构图，4K清晰度。\n【尺寸与构图】\n保持原图宽高比，分辨率放大至原图两倍。将画面精确四等分为左上、右上、左下、右下四个相同大小的区域，每个区域各放置一个视角，内容居中于各自区域内；不添加任何分割线、边框、标注文字或装饰元素；\n左上区域为正面视图（0度），右上区域为左侧面视图（90度，面朝左边），左下区域为背面视图（180度），右下区域为局部特写视图（展示最具设计细节的局部——若为角色则特写面部五官与发型，若为物体则特写核心结构与材质，若为建筑则特写立面细节与材质肌理）。单个区域中仅放置1个主体。\n【关键约束】\n前三个全身视图必须确保主体从最顶端到最底端完整呈现在各自区域内，严禁任何方向的裁切——角色的头顶、脚底不可超出区域边界，建筑的屋顶、地基不可被截断，物体的任何部分不可溢出；主体在每个区域内上下左右居中放置，与区域边缘保留不少于区域宽度10%的安全边距；前三个全身视图的主体必须采用完全相同的缩放比例和相同的呈现尺度，确保主体在三个区域中的视觉高度和大小完全一致；\n【表面细节】\n完整还原原设定图中所有材质细节、纹理、花纹、配色、装饰物，不添加、不遗漏、不改动任何设计元素，贴图精度等效4K。四个视角保持完全一致的配色、材质、结构细节和设计语言，确保主体在不同角度下的绝对一致性；\n【整体画面】\n纯中性灰背景 #888888 ，无环境反射干扰。轻微投射接触增强立体感。整体为专业设定参考图（reference sheet）的规范排版，高清晰度，干净精确。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8djxktmy5-0.png"
+    ]
+  },
+  {
+    "id": "recvs8dvb0F3Js",
+    "slug": "prompt-b0f3js",
+    "title": "经典四视图",
+    "categories": [
+      "角色设计"
+    ],
+    "prompt": "四宫格输出前、左、后、右四个正交视角，统一比例与材质，作为建模的标准参考底图。\n基于参考图，按照以下要求生成四视展示图。建议采用1:1比例或9:16比例构图，4K清晰度。\n【尺寸与构图】\n保持原图宽高比，分辨率放大至原图两倍。将画面精确四等分为左上、右上、左下、右下四个相同大小的区域，每个区域各放置一个视角，内容居中于各自区域内；不添加任何分割线、边框、标注文字或装饰元素；\n左上区域为正面视图（0度），右上区域为左侧面视图（90度，面朝左边），左下区域为背面视图（180度），右下区域为右侧面视图（270度，面朝右边）；右上区域和右下区域的视图方向刚好相反，一左一右，请不要出现两者朝向一致方向。\n【关键约束】\n主体在每个区域内上下左右居中放置，与区域边缘保留不少于区域宽度10%的安全边距。单个区域中仅放置1个主体。\n【表面细节】\n完整还原原设定图中所有材质细节、纹理、花纹、配色、装饰物，不添加、不遗漏、不改动任何设计元素，贴图精度等效4K。四个视角保持完全一致的配色、材质、结构细节和设计语言，确保主体在不同角度下的绝对一致性；\n【整体画面】\n纯中性灰背景 #888888 ，无环境反射干扰。部件边界处以干净的几何切割面收束。部件悬浮于画面中心，无底座，轻微投射接触阴影增强立体感，部件周围保留充足的负空间便于观察轮廓。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8dvb0f3js-0.png",
+      "/generated/prompt-assets/recvs8dvb0f3js-1.png"
+    ]
+  },
+  {
+    "id": "recvs8iHlufDUf",
+    "slug": "t-pose-lufduf",
+    "title": "T Pose",
+    "categories": [
+      "角色设计"
+    ],
+    "prompt": "把角色摆成标准 T 字姿势，只改姿态不动设计，便于测量比例与骨骼绑定。\n生成一张1:1正方形比例的图片；\n将原始角色调整为适用于3D建模的标准T-Pose（T型姿势）：双臂在肩部高度向两侧平直伸展，手掌朝下，双腿伸直并拢，双脚平放。\n保持正确的解剖学比例与对称性。姿势应保持刚性与静止，以适配3D骨骼绑定（rigging）。\n确保所有原始的服装、配饰、背景、光照及艺术风格完全保持不变。\n仅修改身体姿势，使其符合指定的标准技术参考姿势。\n纯灰色背景 #888888，无环境元素；",
+    "attachments": [
+      "/generated/prompt-assets/recvs8ihlufduf-0.png",
+      "/generated/prompt-assets/recvs8ihlufduf-1.png"
+    ]
+  },
+  {
+    "id": "recvs8iLmbW756",
+    "slug": "a-pose-mbw756",
+    "title": "A Pose",
+    "categories": [
+      "角色设计"
+    ],
+    "prompt": "把角色摆成标准 A 字姿势，体态更自然，适合肩臂结构与服装走向的参考。\n生成一张1:1正方形比例的图片；\n该角色被重新设计为标准的 A 字姿势（A-pose）。\n双臂伸直，与身体呈约 45 度角向下方伸展。\n双腿分开，间距与肩同宽。\n完全保留了参考图中的所有原始服装细节、发型及面部特征。\n纯灰色背景 #888888，无环境元素；",
+    "attachments": [
+      "/generated/prompt-assets/recvs8ilmbw756-0.png",
+      "/generated/prompt-assets/recvs8ilmbw756-1.png"
+    ]
+  },
+  {
+    "id": "recvs8iQmI2rst",
+    "slug": "prompt-mi2rst",
+    "title": "角色设定拆解",
+    "categories": [
+      "角色设计"
+    ],
+    "prompt": "把发型、服装、道具、表情拆开平铺展示，一页说清角色的全部构成。\n根据参考图中的角色，生成一张角色设定拆解图（character design breakdown sheet）；\n将角色的各个组成部分分离展示，包括但不限于：发型/头部细节、面部表情集（2-3个代表性表情）、上装/下装/鞋靴单独展示、武器/道具/配饰单独展示、特殊标志或纹样放大展示；\n每个拆解部件旁边留有标注区域的空间感，如同专业设定集的排版方式；\n所有部件保持与原角色完全一致的配色、材质和风格；\n各部件以散点方式分布在画面中，彼此间距合理，排版清晰有序，无重叠；\n纯灰色背景 #888888，无环境元素；\n整体风格为专业游戏/动画角色设定文档的视觉规范，高清、精确、干净。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8iqmi2rst-0.png"
+    ]
+  },
+  {
+    "id": "recvs8iWpYwN1F",
+    "slug": "prompt-pywn1f",
+    "title": "角色补全",
+    "categories": [
+      "角色设计"
+    ],
+    "prompt": "补全被裁切或遮挡的部位，把半截素材还原成一张完整可用的全身图。\n分析参考图中的角色，识别被画面边缘裁剪或被其他元素遮挡的部分；\n生成一张完整的角色全身图，将所有被裁切和遮挡的部位进行合理补全——包括被截断的肢体、被遮挡的服装区域、被裁掉的头部/脚部等；\n补全部分必须在风格、配色、材质、设计语言上与可见部分完全统一，保持角色设计的一致性和合理性；\n角色以与原图一致的姿态呈现，确保全身从头顶到脚底、服饰与手持物品完整可见；\n高清晰度输出，干净利落，可直接用作角色素材。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8iwpywn1f-0.png",
+      "/generated/prompt-assets/recvs8iwpywn1f-1.png"
+    ]
+  },
+  {
+    "id": "recvs8iYR2iGZf",
+    "slug": "prompt-r2igzf",
+    "title": "白模渲染",
+    "categories": [
+      "3D建模/贴图/渲染"
+    ],
+    "prompt": "给白模自动配上合理材质与光照，不改形体直接出照片级效果图。\n白模渲染：将这张白模化为超写实级别的专业渲染效果图。严格保持白模原有的几何形体、结构比例、空间关系和设计细节不变，仅在此基础上赋予真实的材质、光照和环境氛围。\n【材质处理】\n为模型中的每一个可识别部件智能匹配最合理的真实材质：根据物体的功能属性和设计语义自动判断应使用何种材质（如金属、玻璃、木材、织物、混凝土、塑料、皮革、石材等），赋予完整的物理材质属性——包括反射率、粗糙度、折射、次表面散射、微表面细节（划痕、纹理、毛孔、颗粒感）和自然磨损痕迹。所有材质应具备真实世界中的物理正确性和质感厚度。\n【光照系统】\n采用基于物理的全局光照方案：主光源为带有自然色温的方向光，配合柔和的环境光填充阴影区域，确保光影过渡自然连续。精确计算光线在不同材质表面的反射、折射和散射行为——金属面呈现清晰环境映射，粗糙面产生漫反射，透明/半透明材质展现正确的焦散效果。阴影具有真实的软硬边缘变化和接触阴影细节。\n【环境与氛围】\n放置于与该物体/场景功能相匹配的适当环境中，环境提供合理的光照贡献和反射信息，但不喧宾夺主。背景具有适度的景深虚化，地面/承载面呈现正确的接触关系与反射。整体画面具有自然的空气透视和微妙的大气散射效果。\n【渲染品质】\n输出品质对标顶级商业渲染：超高分辨率、细腻的抗锯齿、自然的色调映射、微的暗角和色差、精确的曝光控制。画面噪点极低，细节解析力高，每一处边缘干净利落。最终效果应达到无区分是渲染还是实拍的照片级真实感。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8iyr2igzf-0.png",
+      "/generated/prompt-assets/recvs8iyr2igzf-1.png"
+    ]
+  },
+  {
+    "id": "recvs8j4D93PTO",
+    "slug": "prompt-d93pto",
+    "title": "提取主体转灰模",
+    "categories": [
+      "3D建模/贴图/渲染"
+    ],
+    "prompt": "转成中性灰无材质雕刻渲染图，剥掉颜色干扰，只看几何结构与体积关系。\n根据参考图中的角色/物体，图片转灰模：生成一张适合3D建模参考的数字灰模渲染图（digital sculpt render / ZBrush gray model presentation）；\n【材质定义】\n整体转化为统一的中性灰色无材质实体模型外观（neutral gray clay render），如同ZBrush中MatCap Gray材质球的渲染效果；表面为哑光灰色（约#808080中灰），无任何贴图、色彩、纹理映射或表面涂装；所有设计信息仅通过几何体积、结构转折与表面起伏传达；质感对标数字雕刻软件中的高模细分曲面渲染（subdivision surface render）；\n【几何细节保留】\n完整保留原始设计的所有三维几何信息：服装褶皱的厚度与层叠穿插关系、毛发的体积分组与走向结构、配饰的硬表面轮廓与倒角细节、装备/武器的机械结构与布尔切割痕迹、肌肉/身体结构的体块衔接与骨点起伏；细节精度对标ZBrush百万面高模雕刻水准（high-poly digital sculpt, millions of polygons），可清晰辨认每一处结构转折的硬边与软边过渡；\n【光照方案——均匀立体照明】\n采用数字雕刻软件标准三点布光方案：正前方偏上主光（key light）提供整体可读性，左右两侧对称补光消除死黑区域，确保模型任何结构面都能被照亮并可辨认；光照均匀但保留足够的明暗梯度以突出体积感和结构细节；无硬投影、无高光爆点；明暗过渡平滑自然，类似ambient occlusion与均匀方向光叠加的效果；目标是让每一处凹凸、每一条结构线都清晰可读，服务于建模师观察参考；\n【背景与环境】\n纯白色背景（#FFFFFF），无渐变、无环境元素、无地面反射、无网格；模型灰色外观与纯白背景形成清晰的轮廓分离；\n【画面品质】\n高分辨率数字渲染输出，对标ZBrush/Blender中专业灰模展示的BPR渲染或Cycles clay render截图；画面干净锐利，无噪点、无光斑、无镜头畸变、无后期滤镜；整体观感如同数字雕刻师的高模作品集展示图（portfolio sculpt presentation）；\n【禁止出现】\n不要出现任何色彩、材质贴图、皮肤质感、环境反射、HDRI环境光映射、地面阴影、景深模糊、线框叠加、戏剧性打光、背景装饰物、文字水印。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8j4d93pto-0.png",
+      "/generated/prompt-assets/recvs8j4d93pto-1.png"
+    ]
+  },
+  {
+    "id": "recvs8jbbY5NVe",
+    "slug": "prompt-by5nve",
+    "title": "同风格延展",
+    "categories": [
+      "原画设计"
+    ],
+    "prompt": "深入分析参考图的视觉风格特征，包括：画面的艺术风格（如写实/扁平/赛博朋克/水彩/像素等）、色彩倾向与配色逻辑、笔触/渲染质感、光影处理手法、构图语言和整体氛围情绪；基于以上风格DNA，生成一个全新的创意衍生画面——主题/主体可以是与原图相关但不同的对象（例如原图是角色则生成同世界观下的另一角色；原图是场景则生成同风格的另一场景；原图是物品则生成同系列的另一物品）；\n新画面必须让观者一眼认出与原图属于\"同一系列/同一世界/同一创作者风格\"，但内容本身是全新的、具有独立创意价值的；\n保持与原图完全一致的渲染质量、细节密度和制作精度；\n色彩体系、光影风格、材质质感、氛围情绪与原图高度统一；\n高清晰度输出，具有独立的审美价值和创意亮点。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8jbby5nve-0.png",
+      "/generated/prompt-assets/recvs8jbby5nve-1.png",
+      "/generated/prompt-assets/recvs8jbby5nve-2.png",
+      "/generated/prompt-assets/recvs8jbby5nve-3.png"
+    ]
+  },
+  {
+    "id": "recvs8jqvd2val",
+    "slug": "d-vd2val",
+    "title": "3D建筑轴测图",
+    "categories": [
+      "3D建模/贴图/渲染"
+    ],
+    "prompt": "抽出建筑主体转成 30 度等轴测图，去掉环境干扰，专注体量与结构关系。\n识别并提取参考图中的建筑主体（包括建筑本体及其直接附属结构如阳台、屋顶设备、外挂楼梯等）；\n将该建筑转化为一张标准等轴测视角（isometric view, 30度角）的建筑可视化图；\n移除原图中的所有环境背景（天空、街道、植被、车辆、人物等），仅保留建筑本身；\n以渲染风格完全参考原图本身进行还原，若原图风格为写实风则轴测图也为写实风，若原图风格为3D Q版风则轴测图也为3D Q版风。切勿擅自使用手绘稿等其他风格。\n光照为柔和的全局光照明，轻微的环境光遮蔽（AO）以增强结构层次感，避免强烈阴影干扰对建筑结构的阅读；\n建筑在画面中完整呈现，不裁切，保持合理的画面留白；\n纯灰色背景 #888888，无地面纹理、无天空、无环境元素。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8jqvd2val-0.png",
+      "/generated/prompt-assets/recvs8jqvd2val-1.png"
+    ]
+  },
+  {
+    "id": "recvs8jykk3hES",
+    "slug": "prompt-kk3hes",
+    "title": "图转手绘",
+    "categories": [
+      "场景设计",
+      "角色设计",
+      "原画设计"
+    ],
+    "prompt": "转成灰白线稿示意图，只留主要结构线，让造型更易读，服务雕刻建模。\n将这张图转换为简化的手绘设定稿，用于3D建模参考。\n要求：\n风格：干净的动画/概念设计线稿风格，类似工业设计手绘或游戏美术概念图。\n线条：使用统一的较细的清晰黑色封闭轮廓线描边，描边仅勾勒主要结构边缘和关键转折面。带曲率的起伏凹凸结构、微小细节、划痕、磨损纹理均不使用描边勾勒。\n填色：以浅灰色和白色为主体进行平涂填充，用3-5阶灰度色表达基本明暗体积关系和曲率起伏凹凸关系。\n色彩：去除原图大部分色彩信息，整体接近灰白色调。仅允许保留原图中少量最关键的功能性色彩标识（如发光部件、点缀色），以低饱和度或原色平涂呈现。\n表面：所有材质统一为光滑无纹理的平面感，不表现任何材质贴图、反射、粗糙度、凹凸、褶皱噪点。忽略平面图案，保留击凸压凹、刺绣等非平面结构。\n细节取舍原则：保留定义物体剪影和大结构分区的线条，删除不影响整体造型辨识的小碎细节（如表面划痕、布料微褶皱）.\n背景：纯中性灰色#888888，无渐变无环境\n视角与构图：保持与原图完全一致的视角、比例和构图。\n整体感觉：结构干净的示意图，追求造型清晰可读性，服务于后续3D ZBrush雕刻建模。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8jykk3hes-0.png",
+      "/generated/prompt-assets/recvs8jykk3hes-1.png"
+    ]
+  },
+  {
+    "id": "recvs8jEQJ21qv",
+    "slug": "prompt-qj21qv",
+    "title": "材质花纹移除",
+    "categories": [
+      "3D建模/贴图/渲染"
+    ],
+    "prompt": "移除主体表面所有装饰性花纹与图案，包括雕刻纹、浮雕、镂空纹样、印花、贴花、logo、文字标识、烫金/描边装饰、织物纹理与随机噪点。仅保留物体的整体轮廓、比例与结构性几何特征（功能性硬边、接缝、倒角、开孔、可动部件分界），不改变造型、体量与朝向。处理后表面为干净连续的光滑面，材质为单一纯色（哑光中性灰 / 素白），无图案、无字符、无污渍、无划痕、无做旧痕迹，光照均匀柔和，几何拓扑完整无破面。",
+    "attachments": [
+      "/generated/prompt-assets/recvs8jeqj21qv-0.png",
+      "/generated/prompt-assets/recvs8jeqj21qv-1.png"
+    ]
+  },
+  {
+    "id": "recvse7fe1i4rx",
+    "slug": "d-e1i4rx",
+    "title": "3D拆件",
+    "categories": [
+      "3D建模/贴图/渲染"
+    ],
+    "prompt": "识别图片中所有核心元素，依次拆解提取完整元素主体，转换成3D游戏资产，生成到纯白色背景",
+    "attachments": [
+      "/generated/prompt-assets/recvse7fe1i4rx-0.png",
+      "/generated/prompt-assets/recvse7fe1i4rx-1.png"
+    ]
+  },
+  {
+    "id": "recvskGyXzSMbV",
+    "slug": "prompt-xzsmbv",
+    "title": "风格融合",
+    "categories": [
+      "原画设计",
+      "动画与特效"
+    ],
+    "prompt": "将多张不一样的图进行风格混合，融合生成形成同时具有多种代表特征的新的物种",
+    "attachments": []
+  },
+  {
+    "id": "recvsqc8MWjZZg",
+    "slug": "prompt-mwjzzg",
+    "title": "概念创意说明",
+    "categories": [
+      "原画设计"
+    ],
+    "prompt": "生成作品集介绍，应包含叙述，内容涵盖设计灵感、创作过程等，还可以介绍作品背后的故事、文化意义以及评委可能感兴趣的技术规格。",
+    "attachments": [
+      "/generated/prompt-assets/recvsqc8mwjzzg-0.png"
+    ]
+  }
+]
