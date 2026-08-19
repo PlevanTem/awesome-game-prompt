@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "test": "vitest run",
     "test:e2e": "playwright test --config=playwright.config.ts",
-    "sync:feishu": "node scripts/sync-feishu.mjs"
+    "sync:feishu": "node --env-file=.env.local scripts/sync-feishu.mjs"
   },
   "dependencies": {
     "astro": "^5.0.0"

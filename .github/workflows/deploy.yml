@@ -42,6 +42,7 @@ jobs:
       - name: Build static site
         env:
           BASE_PATH: /${{ github.event.repository.name }}
+          GITHUB_REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
         run: npm run build
 
       - name: Upload GitHub Pages artifact

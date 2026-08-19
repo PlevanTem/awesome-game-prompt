@@ -20,7 +20,11 @@ describe('archive homepage', () => {
 
     await execFileAsync(command, args, {
       cwd: process.cwd(),
-      env: { ...process.env, BASE_PATH: '/prompt-forge' },
+      env: {
+        ...process.env,
+        BASE_PATH: '/prompt-forge',
+        GITHUB_REPOSITORY_URL: 'https://git.example.test/open-source/prompt-forge',
+      },
     });
     const html = await readFile(join(process.cwd(), 'dist', 'index.html'), 'utf8');
 

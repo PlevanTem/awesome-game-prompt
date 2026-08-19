@@ -24,6 +24,7 @@ describe('GitHub Pages deployment workflow', () => {
     expect(workflow).toContain('npx playwright install --with-deps chromium');
     expect(workflow).toContain('npm run test:e2e');
     expect(workflow).toContain('BASE_PATH: /${{ github.event.repository.name }}');
+    expect(workflow).toContain('GITHUB_REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}');
     expect(workflow).toContain('npm run build');
     expect(workflow).toContain('path: ./dist');
     expect(workflow).not.toContain('sync:feishu');

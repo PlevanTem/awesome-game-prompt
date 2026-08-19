@@ -18,9 +18,11 @@ Create a local environment file from the template:
 cp .env.example .env.local
 ```
 
-Set `FEISHU_BASE_TOKEN` and `FEISHU_TABLE_ID` in `.env.local`. You must also have an
-authenticated `lark-cli` available locally. Keep all secret values local: `.env.local` must
-never be committed.
+Set `FEISHU_BASE_TOKEN`, `FEISHU_TABLE_ID`, and `GITHUB_REPOSITORY_URL` in `.env.local`.
+Use the canonical repository URL for `GITHUB_REPOSITORY_URL`; it is rendered as the About-page
+link and is not a secret. You must also have an authenticated `lark-cli` available locally.
+`npm run sync:feishu` loads `.env.local` automatically. Keep secret values local:
+`.env.local` must never be committed.
 
 ## Local workflow
 

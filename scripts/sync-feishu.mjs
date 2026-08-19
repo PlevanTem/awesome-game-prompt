@@ -16,6 +16,7 @@ const execFileAsync = promisify(execFile);
 /** @typedef {{ fileToken: string, name: string }} BasePromptAttachment */
 /** @typedef {{ recordId: string, title: string, categories: string[], prompt: string, attachments: BasePromptAttachment[] }} BasePromptRecord */
 /** @typedef {{ id: string, slug: string, title: string, categories: string[], prompt: string, attachments: string[] }} GeneratedPrompt */
+/** @typedef {{ prompts: GeneratedPrompt[], skippedRecordIds: string[] }} SyncResult */
 /** @typedef {{ runner?: CommandRunner, outputDir?: string, dataFile?: string, environment?: NodeJS.ProcessEnv, remove?: typeof rm }} SyncOptions */
 /** @typedef {(command: string, args: string[]) => Promise<{ stdout: string, stderr: string }>} CommandRunner */
 
@@ -66,6 +67,13 @@ function stringField(value, fieldName, recordId) {
     throw new Error(`Invalid ${fieldName} value for record ${recordId}`);
   }
   return value;
+}
+
+function requiredTextField(value, fieldName, recordId) {
+  if (value === undefined || value === null) {
+    return '';
+  }
+  return stringField(value, fieldName, recordId);
 }
 
 function categoriesField(value, recordId) {
@@ -126,9 +134,9 @@ function parseBaseRecords(stdout) {
 
     return {
       recordId,
-      title: stringField(item.fields.Text, 'Text', recordId),
+      title: requiredTextField(item.fields.Text, 'Text', recordId),
       categories: categoriesField(item.fields.类型, recordId),
-      prompt: stringField(item.fields.Prompt, 'Prompt', recordId),
+      prompt: requiredTextField(item.fields.Prompt, 'Prompt', recordId),
       attachments: attachmentsField(item.fields.Attachment, recordId),
     };
   });
@@ -145,13 +153,6 @@ function makeSlug(title, recordId) {
 
 function toGeneratedPrompt(record) {
   const title = record.title.trim();
-  if (!title) {
-    throw new Error(`Missing title for record ${record.recordId}`);
-  }
-  if (!record.prompt.trim()) {
-    throw new Error(`Missing prompt for record ${record.recordId}`);
-  }
-
   const assetRecordId = record.recordId.toLowerCase();
   return {
     id: record.recordId,
@@ -164,6 +165,42 @@ function toGeneratedPrompt(record) {
       return `/generated/prompt-assets/${assetRecordId}-${index}${extension}`;
     }),
   };
+}
+
+function splitPublishableRecords(records) {
+  const publishableRecords = [];
+  const skippedRecordIds = [];
+
+  for (const record of records) {
+    if (!record.title.trim() || !record.prompt.trim()) {
+      skippedRecordIds.push(record.recordId);
+    } else {
+      publishableRecords.push(record);
+    }
+  }
+
+  return { publishableRecords, skippedRecordIds };
+}
+
+function assertUniqueSlugs(prompts) {
+  const recordIdsBySlug = new Map();
+
+  for (const prompt of prompts) {
+    const recordIds = recordIdsBySlug.get(prompt.slug) ?? [];
+    recordIds.push(prompt.id);
+    recordIdsBySlug.set(prompt.slug, recordIds);
+  }
+
+  const conflictingRecordIds = [...recordIdsBySlug.values()]
+    .filter((recordIds) => recordIds.length > 1)
+    .flat()
+    .sort();
+
+  if (conflictingRecordIds.length > 0) {
+    throw new Error(
+      `Duplicate generated prompt slugs for records: ${conflictingRecordIds.join(', ')}`,
+    );
+  }
 }
 
 function attachmentDestination(stagingAssets, recordId, index, extension) {
@@ -233,7 +270,7 @@ async function publish(stagingAssets, dataTempFile, outputDir, dataFile, remove)
   await removeBackup(remove, dataBackup, { force: true });
 }
 
-/** @returns {Promise<GeneratedPrompt[]>} */
+/** @returns {Promise<SyncResult>} */
 export async function syncBase(options = {}) {
   const environment = options.environment ?? process.env;
   const baseToken = requiredEnvironment(environment, 'FEISHU_BASE_TOKEN');
@@ -266,7 +303,9 @@ export async function syncBase(options = {}) {
     'user',
   ]);
   const records = parseBaseRecords(stdout);
-  const prompts = records.map(toGeneratedPrompt);
+  const { publishableRecords, skippedRecordIds } = splitPublishableRecords(records);
+  const prompts = publishableRecords.map(toGeneratedPrompt);
+  assertUniqueSlugs(prompts);
 
   await mkdir(outputDir, { recursive: true });
   await mkdir(dirname(dataFile), { recursive: true });
@@ -275,7 +314,7 @@ export async function syncBase(options = {}) {
   const dataTempFile = join(dataTempDirectory, 'prompts.json');
 
   try {
-    for (const record of records) {
+    for (const record of publishableRecords) {
       for (let index = 0; index < record.attachments.length; index += 1) {
         const attachment = record.attachments[index];
         const extension = extname(attachment.name).toLowerCase() || '.bin';
@@ -313,7 +352,7 @@ export async function syncBase(options = {}) {
 
     await writeFile(dataTempFile, `${JSON.stringify(prompts, null, 2)}\n`, 'utf8');
     await publish(stagingAssets, dataTempFile, outputDir, dataFile, remove);
-    return prompts;
+    return { prompts, skippedRecordIds };
   } finally {
     await rm(stagingAssets, { force: true, recursive: true });
     await rm(dataTempDirectory, { force: true, recursive: true });
@@ -322,7 +361,10 @@ export async function syncBase(options = {}) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   syncBase()
-    .then((prompts) => {
+    .then(({ prompts, skippedRecordIds }) => {
+      if (skippedRecordIds.length > 0) {
+        console.warn(`Skipped records with blank Text or Prompt: ${skippedRecordIds.join(', ')}`);
+      }
       console.log(`Synced ${prompts.length} prompts.`);
     })
     .catch((error) => {

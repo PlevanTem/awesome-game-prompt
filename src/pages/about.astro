@@ -1,6 +1,12 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const repositoryUrl = process.env.GITHUB_REPOSITORY_URL;
+
+if (!repositoryUrl) {
+  throw new Error('Missing required environment variable: GITHUB_REPOSITORY_URL');
+}
 ---
 
 <BaseLayout title="About - Prompt Forge">
@@ -16,7 +22,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Prompt Forge is a personal archive of game-art prompts, authored and maintained in a
         Feishu Base, then exported as a static site.
       </p>
-      <p>The project is open-source on GitHub.</p>
+      <p>The project is open-source on <a href={repositoryUrl}>GitHub</a>.</p>
     </section>
   </main>
 </BaseLayout>

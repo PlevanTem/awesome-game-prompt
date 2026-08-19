@@ -4,13 +4,25 @@ import { describe, expect, it } from 'vitest';
 import AboutPage from '../src/pages/about.astro';
 
 describe('about page', () => {
-  it('explains the archive without unsupported promotional claims', async () => {
-    const container = await AstroContainer.create();
-    const html = await container.renderToString(AboutPage);
+  it('explains the archive with the configured GitHub repository anchor', async () => {
+    const repositoryUrl = 'https://git.example.test/open-source/prompt-forge';
+    const originalRepositoryUrl = process.env.GITHUB_REPOSITORY_URL;
+    process.env.GITHUB_REPOSITORY_URL = repositoryUrl;
 
-    expect(html).toContain('Prompt Forge');
-    expect(html).toContain('Feishu Base');
-    expect(html).toContain('GitHub');
-    expect(html).not.toMatch(/tested|best|marketplace|community/i);
+    try {
+      const container = await AstroContainer.create();
+      const html = await container.renderToString(AboutPage);
+
+      expect(html).toContain('Prompt Forge');
+      expect(html).toContain('Feishu Base');
+      expect(html).toContain(`href="${repositoryUrl}"`);
+      expect(html).not.toMatch(/tested|best|marketplace|community/i);
+    } finally {
+      if (originalRepositoryUrl === undefined) {
+        delete process.env.GITHUB_REPOSITORY_URL;
+      } else {
+        process.env.GITHUB_REPOSITORY_URL = originalRepositoryUrl;
+      }
+    }
   });
 });

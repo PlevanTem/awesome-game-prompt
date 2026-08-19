@@ -32,6 +32,7 @@ function run(command, args) {
 async function buildFixtureSite() {
   await rm(e2eDistDirectory, { force: true, recursive: true });
   process.env.PROMPT_FORGE_E2E_FIXTURES = '1';
+  process.env.GITHUB_REPOSITORY_URL = 'https://git.example.test/open-source/prompt-forge';
 
   const command = process.platform === 'win32' ? 'cmd.exe' : 'npm';
   const args = process.platform === 'win32'

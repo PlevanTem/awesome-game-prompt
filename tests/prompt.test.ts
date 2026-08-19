@@ -39,30 +39,6 @@ describe('toGeneratedPrompt', () => {
     ]);
   });
 
-  it('throws when the source title is blank', () => {
-    expect(() =>
-      toGeneratedPrompt({
-        recordId: 'recMissingTitle',
-        title: '   ',
-        categories: [],
-        prompt: 'A preserved prompt.',
-        attachments: [],
-      }),
-    ).toThrow('Missing title for record recMissingTitle');
-  });
-
-  it('throws when the source prompt is blank', () => {
-    expect(() =>
-      toGeneratedPrompt({
-        recordId: 'recMissingPrompt',
-        title: 'Concept',
-        categories: [],
-        prompt: '   ',
-        attachments: [],
-      }),
-    ).toThrow('Missing prompt for record recMissingPrompt');
-  });
-
   it('accepts records without attachments', () => {
     const result = toGeneratedPrompt({
       recordId: 'recNoAssets',
