@@ -103,6 +103,183 @@ describe('syncBase', () => {
     ]);
   });
 
+  it('maps the real lark-cli record matrix and follows has_more through a short page', async () => {
+    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
+    temporaryDirectories.push(workspace);
+
+    const outputDir = join(workspace, 'public', 'generated');
+    const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
+    const requestedOffsets: string[] = [];
+    const runner = async (_command: string, args: string[]) => {
+      if (!args.includes('+record-list')) {
+        throw new Error('attachment command must not run');
+      }
+
+      const offset = args[args.indexOf('--offset') + 1];
+      requestedOffsets.push(offset);
+      const pages: Record<string, unknown> = {
+        '0': {
+          ok: true,
+          data: {
+            data: [['First prompt', ['角色设计'], 'First prompt body', []]],
+            fields: ['Text', '类型', 'Prompt', 'Attachment'],
+            has_more: true,
+            record_id_list: ['rec-matrix-0001'],
+          },
+        },
+        '1': {
+          ok: true,
+          data: {
+            data: [['Second prompt', ['场景设计'], 'Second prompt body', []]],
+            fields: ['Text', '类型', 'Prompt', 'Attachment'],
+            has_more: false,
+            record_id_list: ['rec-matrix-0002'],
+          },
+        },
+      };
+
+      return { stderr: '', stdout: JSON.stringify(pages[offset]) };
+    };
+
+    await expect(
+      syncBase({
+        runner,
+        outputDir,
+        dataFile,
+        environment: {
+          FEISHU_BASE_TOKEN: 'base-test',
+          FEISHU_TABLE_ID: 'table-test',
+        },
+      }),
+    ).resolves.toEqual({
+      prompts: [
+        {
+          attachments: [],
+          categories: ['角色设计'],
+          id: 'rec-matrix-0001',
+          prompt: 'First prompt body',
+          slug: 'first-prompt-x-0001',
+          title: 'First prompt',
+        },
+        {
+          attachments: [],
+          categories: ['场景设计'],
+          id: 'rec-matrix-0002',
+          prompt: 'Second prompt body',
+          slug: 'second-prompt-x-0002',
+          title: 'Second prompt',
+        },
+      ],
+      skippedRecordIds: [],
+    });
+    expect(requestedOffsets).toEqual(['0', '1']);
+  });
+
+  it('rejects a real lark-cli matrix when rows and record IDs do not align', async () => {
+    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
+    temporaryDirectories.push(workspace);
+
+    let recordListCalls = 0;
+    await expect(
+      syncBase({
+        runner: async (_command, args) => {
+          if (!args.includes('+record-list')) {
+            throw new Error('attachment command must not run');
+          }
+          recordListCalls += 1;
+          return {
+            stderr: '',
+            stdout: JSON.stringify({
+              ok: true,
+              data: {
+                data: [['Misaligned prompt', [], 'Prompt body', []]],
+                fields: ['Text', '类型', 'Prompt', 'Attachment'],
+                has_more: false,
+                record_id_list: [],
+              },
+            }),
+          };
+        },
+        outputDir: join(workspace, 'public', 'generated'),
+        dataFile: join(workspace, 'src', 'generated', 'prompts.json'),
+        environment: {
+          FEISHU_BASE_TOKEN: 'base-test',
+          FEISHU_TABLE_ID: 'table-test',
+        },
+      }),
+    ).rejects.toThrow('Feishu Base record export included an invalid record matrix');
+    expect(recordListCalls).toBe(1);
+  });
+
+  it('rejects a real lark-cli matrix with unselected field names', async () => {
+    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
+    temporaryDirectories.push(workspace);
+
+    await expect(
+      syncBase({
+        runner: async (_command, args) => {
+          if (!args.includes('+record-list')) {
+            throw new Error('attachment command must not run');
+          }
+          return {
+            stderr: '',
+            stdout: JSON.stringify({
+              ok: true,
+              data: {
+                data: [['Unexpected field prompt', [], 'Prompt body', []]],
+                fields: ['Text', '类型', 'Prompt', 'Unexpected'],
+                has_more: false,
+                record_id_list: ['rec-unexpected-field'],
+              },
+            }),
+          };
+        },
+        outputDir: join(workspace, 'public', 'generated'),
+        dataFile: join(workspace, 'src', 'generated', 'prompts.json'),
+        environment: {
+          FEISHU_BASE_TOKEN: 'base-test',
+          FEISHU_TABLE_ID: 'table-test',
+        },
+      }),
+    ).rejects.toThrow('Feishu Base record export included invalid record matrix fields');
+  });
+
+  it('rejects an empty real lark-cli page that claims has_more to prevent pagination loops', async () => {
+    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
+    temporaryDirectories.push(workspace);
+
+    let recordListCalls = 0;
+    await expect(
+      syncBase({
+        runner: async (_command, args) => {
+          if (!args.includes('+record-list')) {
+            throw new Error('attachment command must not run');
+          }
+          recordListCalls += 1;
+          return {
+            stderr: '',
+            stdout: JSON.stringify({
+              ok: true,
+              data: {
+                data: [],
+                fields: ['Text', '类型', 'Prompt', 'Attachment'],
+                has_more: true,
+                record_id_list: [],
+              },
+            }),
+          };
+        },
+        outputDir: join(workspace, 'public', 'generated'),
+        dataFile: join(workspace, 'src', 'generated', 'prompts.json'),
+        environment: {
+          FEISHU_BASE_TOKEN: 'base-test',
+          FEISHU_TABLE_ID: 'table-test',
+        },
+      }),
+    ).rejects.toThrow('Feishu Base record export reported more records without returning records');
+    expect(recordListCalls).toBe(1);
+  });
+
   it('loads .env.local through npm run sync:feishu before invoking lark-cli', async () => {
     const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-entry-'));
     temporaryDirectories.push(workspace);

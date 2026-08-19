@@ -17,6 +17,7 @@ const execFileAsync = promisify(execFile);
 /** @typedef {{ recordId: string, title: string, categories: string[], prompt: string, attachments: BasePromptAttachment[] }} BasePromptRecord */
 /** @typedef {{ id: string, slug: string, title: string, categories: string[], prompt: string, attachments: string[] }} GeneratedPrompt */
 /** @typedef {{ prompts: GeneratedPrompt[], skippedRecordIds: string[] }} SyncResult */
+/** @typedef {{ records: BasePromptRecord[], hasMore?: boolean }} BasePromptRecordPage */
 /** @typedef {{ runner?: CommandRunner, outputDir?: string, dataFile?: string, environment?: NodeJS.ProcessEnv, remove?: typeof rm }} SyncOptions */
 /** @typedef {(command: string, args: string[]) => Promise<{ stdout: string, stderr: string }>} CommandRunner */
 
@@ -24,6 +25,7 @@ const projectRoot = join(import.meta.dirname, '..');
 const defaultOutputDir = join(projectRoot, 'public', 'generated');
 const defaultDataFile = join(projectRoot, 'src', 'generated', 'prompts.json');
 const recordPageSize = 200;
+const selectedRecordFields = new Set(['Text', '类型', 'Prompt', 'Attachment']);
 
 function commandName() {
   return process.platform === 'win32' ? 'lark-cli.cmd' : 'lark-cli';
@@ -110,6 +112,31 @@ function attachmentsField(value, recordId) {
   });
 }
 
+function baseRecord(recordId, fields) {
+  if (typeof recordId !== 'string' || !fields || typeof fields !== 'object') {
+    throw new Error('Feishu Base record export included an invalid record');
+  }
+
+  return {
+    recordId,
+    title: requiredTextField(fields.Text, 'Text', recordId),
+    categories: categoriesField(fields.类型, recordId),
+    prompt: requiredTextField(fields.Prompt, 'Prompt', recordId),
+    attachments: attachmentsField(fields.Attachment, recordId),
+  };
+}
+
+function optionalHasMore(value) {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (typeof value !== 'boolean') {
+    throw new Error('Feishu Base record export included an invalid has_more value');
+  }
+  return value;
+}
+
+/** @returns {BasePromptRecordPage} */
 function parseBaseRecords(stdout) {
   let envelope;
   try {
@@ -122,29 +149,49 @@ function parseBaseRecords(stdout) {
     throw new Error('Feishu Base record export was not successful');
   }
 
-  const items = envelope.data?.items;
-  if (!Array.isArray(items)) {
-    throw new Error('Feishu Base record export did not include items');
+  const responseData = envelope.data;
+  const items = responseData?.items;
+  if (Array.isArray(items)) {
+    return {
+      records: items.map((item) => baseRecord(item?.record_id ?? item?.recordId, item?.fields)),
+      hasMore: optionalHasMore(responseData.has_more),
+    };
   }
 
-  return items.map((item) => {
-    const recordId = item?.record_id ?? item?.recordId;
-    if (typeof recordId !== 'string' || !item.fields || typeof item.fields !== 'object') {
-      throw new Error('Feishu Base record export included an invalid record');
-    }
+  const rows = responseData?.data;
+  const fields = responseData?.fields;
+  const recordIds = responseData?.record_id_list;
+  if (!Array.isArray(rows) || !Array.isArray(fields) || !Array.isArray(recordIds)) {
+    throw new Error('Feishu Base record export did not include items or a record matrix');
+  }
+  if (
+    fields.length !== selectedRecordFields.size ||
+    !fields.every((field) => typeof field === 'string' && selectedRecordFields.has(field)) ||
+    new Set(fields).size !== fields.length
+  ) {
+    throw new Error('Feishu Base record export included invalid record matrix fields');
+  }
+  if (recordIds.length !== rows.length) {
+    throw new Error('Feishu Base record export included an invalid record matrix');
+  }
 
-    return {
-      recordId,
-      title: requiredTextField(item.fields.Text, 'Text', recordId),
-      categories: categoriesField(item.fields.类型, recordId),
-      prompt: requiredTextField(item.fields.Prompt, 'Prompt', recordId),
-      attachments: attachmentsField(item.fields.Attachment, recordId),
-    };
-  });
+  return {
+    records: rows.map((row, rowIndex) => {
+      if (!Array.isArray(row) || row.length !== fields.length) {
+        throw new Error('Feishu Base record export included an invalid record matrix row');
+      }
+      const values = Object.fromEntries(
+        fields.map((field, fieldIndex) => [field, row[fieldIndex]]),
+      );
+      return baseRecord(recordIds[rowIndex], values);
+    }),
+    hasMore: optionalHasMore(responseData.has_more),
+  };
 }
 
 async function fetchBaseRecords(runner, baseToken, tableId) {
   const records = [];
+  const recordIds = new Set();
   let offset = 0;
 
   while (true) {
@@ -173,12 +220,19 @@ async function fetchBaseRecords(runner, baseToken, tableId) {
       'user',
     ]);
     const page = parseBaseRecords(stdout);
-    records.push(...page);
+    if (page.records.some((record) => recordIds.has(record.recordId))) {
+      throw new Error('Feishu Base record export repeated a record across pages');
+    }
+    page.records.forEach((record) => recordIds.add(record.recordId));
+    records.push(...page.records);
 
-    if (page.length < recordPageSize) {
+    if (page.hasMore === false || (page.hasMore === undefined && page.records.length < recordPageSize)) {
       return records;
     }
-    offset += page.length;
+    if (page.records.length === 0) {
+      throw new Error('Feishu Base record export reported more records without returning records');
+    }
+    offset += page.records.length;
   }
 }
 
