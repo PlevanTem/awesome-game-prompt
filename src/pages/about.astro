@@ -1,0 +1,22 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About - Prompt Forge">
+  <SiteHeader />
+  <main class="archive-index">
+    <div class="archive-index__heading">
+      <p class="archive-index__eyebrow">ARCHIVE NOTES / 001</p>
+      <h1>ABOUT PROMPT FORGE.</h1>
+    </div>
+
+    <section class="archive-index__empty" aria-label="About Prompt Forge">
+      <p>
+        Prompt Forge is a personal archive of game-art prompts, authored and maintained in a
+        Feishu Base, then exported as a static site.
+      </p>
+      <p>The project is open-source on GitHub.</p>
+    </section>
+  </main>
+</BaseLayout>
