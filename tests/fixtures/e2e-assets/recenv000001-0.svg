@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Neon city environment reference">
+  <rect width="800" height="1000" fill="#171814"/>
+  <path d="M0 700 200 420l150 180 160-280 290 380v300H0z" fill="#c9ff3e"/>
+  <text x="400" y="920" fill="#e9e8e0" font-family="monospace" font-size="44" text-anchor="middle">NEON CITY</text>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Character material reference">
+  <rect width="800" height="1000" fill="#e55330"/>
+  <circle cx="400" cy="360" r="180" fill="#e9e8e0" stroke="#171814" stroke-width="18"/>
+  <path d="M160 720h480" stroke="#171814" stroke-width="18"/>
+  <text x="400" y="920" fill="#171814" font-family="monospace" font-size="44" text-anchor="middle">MATERIAL</text>
+</svg>

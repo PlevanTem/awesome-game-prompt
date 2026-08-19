@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Four-view character reference">
+  <rect width="800" height="1000" fill="#c9ff3e"/>
+  <path d="M80 80h640v840H80zM400 180v640M180 500h440" fill="none" stroke="#171814" stroke-width="18"/>
+  <text x="400" y="920" fill="#171814" font-family="monospace" font-size="48" text-anchor="middle">FOUR VIEW</text>
+</svg>

@@ -61,7 +61,7 @@ const nextPrompt = archivePrompts[promptIndex + 1];
 </BaseLayout>
 
 <script define:vars={{ promptText: prompt.prompt }}>
-  document.querySelectorAll<HTMLButtonElement>('[data-copy-prompt]').forEach((button) => {
+  document.querySelectorAll('[data-copy-prompt]').forEach((button) => {
     button.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(promptText);
