@@ -56,3 +56,14 @@ npm run build
 
 To publish an update, edit the Feishu Base, run the sync command, review the generated
 content, run the tests, commit the resulting changes, and push them.
+
+## GitHub Pages deployment
+
+Before the first deployment, push this repository to GitHub. In the repository, open
+**Settings > Pages** and select **GitHub Actions** as the publishing source. Pushes to
+`master` then run the deployment workflow; use the GitHub Pages URL shown by that workflow
+after it completes.
+
+Content changes are prepared locally: synchronize Feishu, review the generated content, run
+the unit and browser tests, commit the reviewed changes, and push them to `master`. The
+deployment workflow does not synchronize Feishu or use local credentials.
