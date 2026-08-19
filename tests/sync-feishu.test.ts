@@ -43,6 +43,66 @@ describe('syncBase', () => {
     });
   });
 
+  it('requests Base records in 200-record offset pages and stops after a short page', async () => {
+    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
+    temporaryDirectories.push(workspace);
+
+    const outputDir = join(workspace, 'public', 'generated');
+    const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
+    const requestedPages: Array<{ limit: string | undefined; offset: string | undefined }> = [];
+    const records = Array.from({ length: 401 }, (_, index) => ({
+      record_id: `rec-page-${String(index).padStart(4, '0')}`,
+      fields: {
+        Attachment: [],
+        Prompt: `Prompt ${index}`,
+        Text: `Prompt title ${index}`,
+        类型: [],
+      },
+    }));
+    const runner = async (_command: string, args: string[]) => {
+      if (!args.includes('+record-list')) {
+        throw new Error('attachment command must not run');
+      }
+
+      const limit = args[args.indexOf('--limit') + 1];
+      const offset = args[args.indexOf('--offset') + 1];
+      requestedPages.push({ limit, offset });
+      if (limit !== '200') {
+        throw new Error(`lark-cli only accepts --limit 200, received ${limit}`);
+      }
+
+      const start = Number(offset);
+      return {
+        stderr: '',
+        stdout: JSON.stringify({
+          ok: true,
+          data: { items: records.slice(start, start + Number(limit)) },
+        }),
+      };
+    };
+
+    const { prompts, skippedRecordIds } = await syncBase({
+      runner,
+      outputDir,
+      dataFile,
+      environment: {
+        FEISHU_BASE_TOKEN: 'base-test',
+        FEISHU_TABLE_ID: 'table-test',
+      },
+    });
+
+    expect(prompts).toHaveLength(401);
+    expect(prompts[0]).toMatchObject({ id: 'rec-page-0000' });
+    expect(prompts.at(-1)).toMatchObject({ id: 'rec-page-0400' });
+    expect(skippedRecordIds).toEqual([]);
+    expect(JSON.parse(await readFile(dataFile, 'utf8'))).toHaveLength(401);
+    expect(requestedPages).toEqual([
+      { limit: '200', offset: '0' },
+      { limit: '200', offset: '200' },
+      { limit: '200', offset: '400' },
+    ]);
+  });
+
   it('loads .env.local through npm run sync:feishu before invoking lark-cli', async () => {
     const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-entry-'));
     temporaryDirectories.push(workspace);

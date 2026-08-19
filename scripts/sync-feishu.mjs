@@ -23,6 +23,7 @@ const execFileAsync = promisify(execFile);
 const projectRoot = join(import.meta.dirname, '..');
 const defaultOutputDir = join(projectRoot, 'public', 'generated');
 const defaultDataFile = join(projectRoot, 'src', 'generated', 'prompts.json');
+const recordPageSize = 200;
 
 function commandName() {
   return process.platform === 'win32' ? 'lark-cli.cmd' : 'lark-cli';
@@ -140,6 +141,45 @@ function parseBaseRecords(stdout) {
       attachments: attachmentsField(item.fields.Attachment, recordId),
     };
   });
+}
+
+async function fetchBaseRecords(runner, baseToken, tableId) {
+  const records = [];
+  let offset = 0;
+
+  while (true) {
+    const { stdout } = await runner(commandName(), [
+      'base',
+      '+record-list',
+      '--base-token',
+      baseToken,
+      '--table-id',
+      tableId,
+      '--field-id',
+      'Text',
+      '--field-id',
+      '类型',
+      '--field-id',
+      'Prompt',
+      '--field-id',
+      'Attachment',
+      '--limit',
+      String(recordPageSize),
+      '--offset',
+      String(offset),
+      '--format',
+      'json',
+      '--as',
+      'user',
+    ]);
+    const page = parseBaseRecords(stdout);
+    records.push(...page);
+
+    if (page.length < recordPageSize) {
+      return records;
+    }
+    offset += page.length;
+  }
 }
 
 function makeSlug(title, recordId) {
@@ -280,29 +320,7 @@ export async function syncBase(options = {}) {
   const outputDir = options.outputDir ?? defaultOutputDir;
   const dataFile = options.dataFile ?? defaultDataFile;
 
-  const { stdout } = await runner(commandName(), [
-    'base',
-    '+record-list',
-    '--base-token',
-    baseToken,
-    '--table-id',
-    tableId,
-    '--field-id',
-    'Text',
-    '--field-id',
-    '类型',
-    '--field-id',
-    'Prompt',
-    '--field-id',
-    'Attachment',
-    '--limit',
-    '2000',
-    '--format',
-    'json',
-    '--as',
-    'user',
-  ]);
-  const records = parseBaseRecords(stdout);
+  const records = await fetchBaseRecords(runner, baseToken, tableId);
   const { publishableRecords, skippedRecordIds } = splitPublishableRecords(records);
   const prompts = publishableRecords.map(toGeneratedPrompt);
   assertUniqueSlugs(prompts);
