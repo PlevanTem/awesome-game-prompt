@@ -1,7 +1,6 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { cp, mkdtemp, readdir, readFile, rm, stat } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { readdir, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -76,15 +75,7 @@ async function stopFixtureServer(server: ReturnType<typeof spawn>): Promise<void
 
 describe('E2E fixture output', () => {
   it('leaves the normal production dist unchanged', async () => {
-    const backupDirectory = await mkdtemp(join(tmpdir(), 'prompt-forge-e2e-output-'));
-    const backupDistDirectory = join(backupDirectory, 'dist');
     const initialDigest = await digestDirectory(distDirectory);
-    const hadProductionDist = initialDigest !== null;
-
-    if (hadProductionDist) {
-      await cp(distDirectory, backupDistDirectory, { recursive: true });
-    }
-
     const server = spawn(process.execPath, [join(root, 'tests', 'e2e-server.mjs')], {
       cwd: root,
       stdio: 'ignore',
@@ -95,13 +86,6 @@ describe('E2E fixture output', () => {
       expect(await digestDirectory(distDirectory)).toBe(initialDigest);
     } finally {
       await stopFixtureServer(server);
-      await rm(distDirectory, { force: true, recursive: true });
-
-      if (hadProductionDist) {
-        await cp(backupDistDirectory, distDirectory, { recursive: true });
-      }
-
-      await rm(backupDirectory, { force: true, recursive: true });
     }
   }, 30_000);
 });
