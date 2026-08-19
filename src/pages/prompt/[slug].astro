@@ -1,12 +1,14 @@
 ---
 import PromptGallery from '../../components/PromptGallery.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
+import { getArchivePrompts } from '../../data/archive';
 import type { GeneratedPrompt } from '../../data/types';
-import promptsData from '../../generated/prompts.json';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-export function getStaticPaths() {
-  return (promptsData as GeneratedPrompt[]).map((prompt, promptIndex) => ({
+export async function getStaticPaths() {
+  const prompts = await getArchivePrompts();
+
+  return prompts.map((prompt, promptIndex) => ({
     params: { slug: prompt.slug },
     props: { prompt, promptIndex },
   }));
@@ -18,7 +20,8 @@ interface Props {
   archivePrompts?: GeneratedPrompt[];
 }
 
-const { prompt, promptIndex, archivePrompts = promptsData } = Astro.props as Props;
+const { prompt, promptIndex, archivePrompts: archivePromptsProp } = Astro.props as Props;
+const archivePrompts = archivePromptsProp ?? await getArchivePrompts();
 const configuredBase = process.env.BASE_PATH || '/';
 const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
 const previousPrompt = archivePrompts[promptIndex - 1];

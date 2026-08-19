@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { watch } from 'node:fs';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -74,8 +75,14 @@ async function stopFixtureServer(server: ReturnType<typeof spawn>): Promise<void
 }
 
 describe('E2E fixture output', () => {
-  it('leaves the normal production dist unchanged', async () => {
+  it('leaves normal production inputs and dist unchanged', async () => {
     const initialDigest = await digestDirectory(distDirectory);
+    const productionInputChanges: string[] = [];
+    const watchers = [join(root, 'src', 'generated'), join(root, 'public')].map((directory) =>
+      watch(directory, (eventType, filename) => {
+        productionInputChanges.push(`${directory}:${eventType}:${filename ?? ''}`);
+      }),
+    );
     const server = spawn(process.execPath, [join(root, 'tests', 'e2e-server.mjs')], {
       cwd: root,
       stdio: 'ignore',
@@ -84,7 +91,9 @@ describe('E2E fixture output', () => {
     try {
       await waitForFixtureServer(server);
       expect(await digestDirectory(distDirectory)).toBe(initialDigest);
+      expect(productionInputChanges).toEqual([]);
     } finally {
+      watchers.forEach((watcher) => watcher.close());
       await stopFixtureServer(server);
     }
   }, 30_000);

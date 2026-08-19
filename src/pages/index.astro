@@ -2,11 +2,11 @@
 import ArchiveControls from '../components/ArchiveControls.astro';
 import PromptTile from '../components/PromptTile.astro';
 import SiteHeader from '../components/SiteHeader.astro';
+import { getArchivePrompts } from '../data/archive';
 import type { GeneratedPrompt } from '../data/types';
-import promptsData from '../generated/prompts.json';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const archivePrompts = (Astro.props.prompts ?? promptsData) as GeneratedPrompt[];
+const archivePrompts = (Astro.props.prompts ?? await getArchivePrompts()) as GeneratedPrompt[];
 ---
 
 <BaseLayout title="Prompt Forge - Game Art Prompts">
