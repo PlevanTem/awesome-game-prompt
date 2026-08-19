@@ -5,7 +5,7 @@ import { extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
-const distDirectory = join(root, 'dist');
+const e2eDistDirectory = join(root, '.e2e-dist');
 const dataFile = join(root, 'src', 'generated', 'prompts.json');
 const fixtureFile = join(root, 'tests', 'fixtures', 'e2e-prompts.json');
 const fixtureAssets = join(root, 'tests', 'fixtures', 'e2e-assets');
@@ -37,6 +37,7 @@ async function buildFixtureSite() {
   const originalPrompts = await readFile(dataFile, 'utf8');
 
   try {
+    await rm(e2eDistDirectory, { force: true, recursive: true });
     await writeFile(dataFile, await readFile(fixtureFile, 'utf8'), 'utf8');
     await mkdir(publicFixtureAssets, { recursive: true });
 
@@ -46,8 +47,8 @@ async function buildFixtureSite() {
 
     const command = process.platform === 'win32' ? 'cmd.exe' : 'npm';
     const args = process.platform === 'win32'
-      ? ['/d', '/s', '/c', 'npm.cmd', 'exec', 'astro', 'build']
-      : ['exec', 'astro', 'build'];
+      ? ['/d', '/s', '/c', 'npm.cmd', 'exec', 'astro', 'build', '--', '--outDir', '.e2e-dist']
+      : ['exec', 'astro', 'build', '--', '--outDir', '.e2e-dist'];
     await run(command, args);
   } finally {
     await writeFile(dataFile, originalPrompts, 'utf8');
@@ -58,9 +59,9 @@ async function buildFixtureSite() {
 function resolveRequestPath(requestUrl) {
   const pathname = decodeURIComponent(new URL(requestUrl, `http://127.0.0.1:${port}`).pathname);
   const relativePath = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
-  const requested = resolve(distDirectory, relativePath);
+  const requested = resolve(e2eDistDirectory, relativePath);
 
-  if (requested !== distDirectory && !requested.startsWith(`${distDirectory}${sep}`)) {
+  if (requested !== e2eDistDirectory && !requested.startsWith(`${e2eDistDirectory}${sep}`)) {
     return null;
   }
 

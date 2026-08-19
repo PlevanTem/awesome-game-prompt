@@ -2,6 +2,7 @@
 /.worktrees/
 node_modules/
 dist/
+.e2e-dist/
 .astro/
 test-results/
 playwright-report/
