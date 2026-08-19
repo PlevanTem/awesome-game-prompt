@@ -7,7 +7,7 @@ import {
   rm,
   writeFile,
 } from 'node:fs/promises';
-import { dirname, extname, isAbsolute, join, relative, resolve } from 'node:path';
+import { dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { promisify } from 'node:util';
 import { pathToFileURL } from 'node:url';
 
@@ -45,7 +45,10 @@ export function commandInvocation(command, args, platform = process.platform) {
 /** @type {CommandRunner} */
 async function runCommand(command, args) {
   const invocation = commandInvocation(command, args);
-  return execFileAsync(invocation.executable, invocation.args, { encoding: 'utf8' });
+  return execFileAsync(invocation.executable, invocation.args, {
+    cwd: projectRoot,
+    encoding: 'utf8',
+  });
 }
 
 async function pathExists(path) {
@@ -313,6 +316,19 @@ function attachmentDestination(stagingAssets, recordId, index, extension) {
   return destination;
 }
 
+function relativePathWithinRepository(path, errorMessage) {
+  const relativePath = relative(projectRoot, path);
+  if (
+    relativePath === '' ||
+    relativePath === '..' ||
+    relativePath.startsWith(`..${sep}`) ||
+    isAbsolute(relativePath)
+  ) {
+    throw new Error(errorMessage);
+  }
+  return relativePath;
+}
+
 async function removeBackup(remove, path, options) {
   try {
     await remove(path, options);
@@ -371,8 +387,16 @@ export async function syncBase(options = {}) {
   const tableId = requiredEnvironment(environment, 'FEISHU_TABLE_ID');
   const runner = options.runner ?? runCommand;
   const remove = options.remove ?? rm;
-  const outputDir = options.outputDir ?? defaultOutputDir;
+  const outputDir = resolve(options.outputDir ?? defaultOutputDir);
   const dataFile = options.dataFile ?? defaultDataFile;
+  const outputDirRelative = relative(projectRoot, outputDir);
+  if (
+    outputDirRelative === '..' ||
+    outputDirRelative.startsWith(`..${sep}`) ||
+    isAbsolute(outputDirRelative)
+  ) {
+    throw new Error('Attachment staging directory must be inside the repository working directory');
+  }
 
   const records = await fetchBaseRecords(runner, baseToken, tableId);
   const { publishableRecords, skippedRecordIds } = splitPublishableRecords(records);
@@ -396,6 +420,10 @@ export async function syncBase(options = {}) {
           index,
           extension,
         );
+        const output = relativePathWithinRepository(
+          destination,
+          'Attachment destination escapes repository working directory',
+        );
         try {
           await runner(commandName(), [
             'base',
@@ -409,7 +437,7 @@ export async function syncBase(options = {}) {
             '--file-token',
             attachment.fileToken,
             '--output',
-            destination,
+            output,
             '--as',
             'user',
           ]);

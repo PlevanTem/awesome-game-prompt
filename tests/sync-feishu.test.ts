@@ -1,7 +1,7 @@
 import { execFile } from 'node:child_process';
 import { chmod, copyFile, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { delimiter, join } from 'node:path';
+import { delimiter, isAbsolute, join, relative, resolve } from 'node:path';
 import { promisify } from 'node:util';
 
 import { afterEach, describe, expect, it } from 'vitest';
@@ -9,6 +9,12 @@ import { commandInvocation, syncBase } from '../scripts/sync-feishu.mjs';
 
 const temporaryDirectories: string[] = [];
 const execFileAsync = promisify(execFile);
+
+async function createWorkspace() {
+  const workspace = await mkdtemp(join(process.cwd(), '.sync-test-'));
+  temporaryDirectories.push(workspace);
+  return workspace;
+}
 
 afterEach(async () => {
   await Promise.all(
@@ -44,8 +50,7 @@ describe('syncBase', () => {
   });
 
   it('requests Base records in 200-record offset pages and stops after a short page', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     const outputDir = join(workspace, 'public', 'generated');
     const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
@@ -104,8 +109,7 @@ describe('syncBase', () => {
   });
 
   it('maps the real lark-cli record matrix and follows has_more through a short page', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     const outputDir = join(workspace, 'public', 'generated');
     const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
@@ -176,8 +180,7 @@ describe('syncBase', () => {
   });
 
   it('rejects a real lark-cli matrix when rows and record IDs do not align', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     let recordListCalls = 0;
     await expect(
@@ -212,8 +215,7 @@ describe('syncBase', () => {
   });
 
   it('rejects a real lark-cli matrix with unselected field names', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     await expect(
       syncBase({
@@ -245,8 +247,7 @@ describe('syncBase', () => {
   });
 
   it('rejects an empty real lark-cli page that claims has_more to prevent pagination loops', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     let recordListCalls = 0;
     await expect(
@@ -350,9 +351,79 @@ describe('syncBase', () => {
     expect(stdout).toContain('Synced 0 prompts.');
   });
 
+  it('passes a safe cwd-relative attachment output path to lark-cli', async () => {
+    const workspace = await createWorkspace();
+    const outputDir = join(workspace, 'public', 'generated');
+    const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
+    let attachmentOutput: string | undefined;
+    const runner = async (_command: string, args: string[]) => {
+      if (args.includes('+record-list')) {
+        return {
+          stderr: '',
+          stdout: JSON.stringify({
+            ok: true,
+            data: {
+              items: [{
+                record_id: 'rec-relative-output',
+                fields: {
+                  Attachment: [{ file_token: 'file-relative', name: 'asset.png' }],
+                  Prompt: 'Relative output path.',
+                  Text: 'Relative output',
+                  类型: [],
+                },
+              }],
+            },
+          }),
+        };
+      }
+
+      attachmentOutput = args[args.indexOf('--output') + 1];
+      expect(isAbsolute(attachmentOutput)).toBe(false);
+      expect(relative(process.cwd(), resolve(process.cwd(), attachmentOutput))).not.toMatch(/^\.\.(?:[\\/]|$)/);
+      await writeFile(resolve(process.cwd(), attachmentOutput), 'downloaded asset', 'utf8');
+      return { stderr: '', stdout: '' };
+    };
+
+    await syncBase({
+      runner,
+      outputDir,
+      dataFile,
+      environment: {
+        FEISHU_BASE_TOKEN: 'base-test',
+        FEISHU_TABLE_ID: 'table-test',
+      },
+    });
+
+    expect(attachmentOutput).toBeDefined();
+    expect(await readFile(join(outputDir, 'prompt-assets', 'rec-relative-output-0.png'), 'utf8')).toBe(
+      'downloaded asset',
+    );
+  });
+
+  it('rejects an output directory outside the repository working directory before fetching records', async () => {
+    const outsideWorkspace = await mkdtemp(join(tmpdir(), 'prompt-forge-outside-'));
+    temporaryDirectories.push(outsideWorkspace);
+    let commandCalls = 0;
+
+    await expect(
+      syncBase({
+        runner: async () => {
+          commandCalls += 1;
+          return { stderr: '', stdout: JSON.stringify({ ok: true, data: { items: [] } }) };
+        },
+        outputDir: join(outsideWorkspace, 'public', 'generated'),
+        dataFile: join(outsideWorkspace, 'src', 'generated', 'prompts.json'),
+        environment: {
+          FEISHU_BASE_TOKEN: 'base-test',
+          FEISHU_TABLE_ID: 'table-test',
+        },
+      }),
+    ).rejects.toThrow('Attachment staging directory must be inside the repository working directory');
+    expect(commandCalls).toBe(0);
+  });
+
   it('leaves the current dataset unchanged when an attachment download fails', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     const outputDir = join(workspace, 'public', 'generated');
     const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
@@ -422,8 +493,7 @@ describe('syncBase', () => {
   });
 
   it('leaves the current dataset unchanged when the Base record export transport fails', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     const outputDir = join(workspace, 'public', 'generated');
     const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
@@ -453,8 +523,7 @@ describe('syncBase', () => {
   });
 
   it('omits blank Text or Prompt records and reports every skipped record ID', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     const outputDir = join(workspace, 'public', 'generated');
     const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
@@ -522,8 +591,7 @@ describe('syncBase', () => {
   });
 
   it('fails before publication with every record ID that has a colliding slug', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     const outputDir = join(workspace, 'public', 'generated');
     const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
@@ -610,8 +678,7 @@ describe('syncBase', () => {
   });
 
   it('keeps the published archive when post-publish backup cleanup fails', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     const outputDir = join(workspace, 'public', 'generated');
     const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
@@ -675,8 +742,7 @@ describe('syncBase', () => {
   });
 
   it('rejects an attachment path that escapes its staging directory', async () => {
-    const workspace = await mkdtemp(join(tmpdir(), 'prompt-forge-sync-'));
-    temporaryDirectories.push(workspace);
+    const workspace = await createWorkspace();
 
     const outputDir = join(workspace, 'public', 'generated');
     const dataFile = join(workspace, 'src', 'generated', 'prompts.json');
