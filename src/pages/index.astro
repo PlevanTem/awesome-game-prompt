@@ -5,28 +5,16 @@ import SiteHeader from '../components/SiteHeader.astro';
 import { getArchivePrompts } from '../data/archive';
 import type { GeneratedPrompt } from '../data/types';
 import BaseLayout from '../layouts/BaseLayout.astro';
-
 const archivePrompts = (Astro.props.prompts ?? await getArchivePrompts()) as GeneratedPrompt[];
 ---
-
-<BaseLayout title="Prompt Forge - Game Art Prompts">
+<BaseLayout title="Awesome Game Prompts｜游戏美术提示词库">
   <SiteHeader />
   <main class="archive-index">
     <div class="archive-index__heading">
-      <p class="archive-index__eyebrow">PRODUCTION INDEX / 001</p>
-      <h1>GAME ART PROMPTS, INDEXED.</h1>
+      <p class="archive-index__eyebrow" data-i18n-zh="GAME ART / PROMPT LIBRARY" data-i18n-en="GAME ART / PROMPT LIBRARY">GAME ART / PROMPT LIBRARY</p>
+      <div><h1 data-i18n-zh="游戏美术提示词库" data-i18n-en="GAME ART PROMPTS">游戏美术提示词库</h1><p class="archive-index__intro" data-i18n-zh="浏览效果，复制即用。" data-i18n-en="Browse results. Copy and create.">浏览效果，复制即用。</p></div>
     </div>
-
     <ArchiveControls promptCount={archivePrompts.length} />
-
-    {
-      archivePrompts.length > 0 ? (
-        <section class="prompt-grid" aria-label="Prompt archive">
-          {archivePrompts.map((prompt, index) => <PromptTile prompt={prompt} index={index} />)}
-        </section>
-      ) : (
-        <p class="archive-index__empty">NO PROMPTS INDEXED YET.</p>
-      )
-    }
+    {archivePrompts.length > 0 ? <section class="prompt-grid" aria-label="提示词库" data-i18n-aria-zh="提示词库" data-i18n-aria-en="Prompt library">{archivePrompts.map((prompt, index) => <PromptTile prompt={prompt} index={index} />)}</section> : <p class="archive-index__empty">暂无提示词。</p>}
   </main>
 </BaseLayout>

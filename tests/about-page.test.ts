@@ -13,8 +13,8 @@ describe('about page', () => {
       const container = await AstroContainer.create();
       const html = await container.renderToString(AboutPage);
 
-      expect(html).toContain('Prompt Forge');
-      expect(html).toContain('Feishu Base');
+      expect(html).toContain('Awesome Game Prompts');
+      expect(html).toContain('浏览效果，复制即用。');
       expect(html).toContain(`href="${repositoryUrl}"`);
       expect(html).not.toMatch(/tested|best|marketplace|community/i);
     } finally {

@@ -33,8 +33,8 @@ describe('static prompt detail page', () => {
       props: { prompt: prompts[0], promptIndex: 0, archivePrompts: prompts },
     });
 
-    expect(html).toContain('ORIGINAL PROMPT');
-    expect(html).toContain('COPY PROMPT +');
+    expect(html).toContain('原始提示词');
+    expect(html).toContain('复制提示词');
     expect(html).toContain('Show image 1');
     expect(html).toContain('Show image 2');
     expect(html).toContain('aria-pressed="true"');

@@ -1,71 +1,37 @@
-# Prompt Forge
+# Awesome Game Prompts 🎮
 
-Prompt Forge is a personal archive of game-art prompts. Prompt records are authored and
-maintained in Feishu Base, then exported into this static site. The project is open-source
-on GitHub.
+[English](./README.en.md)
 
-## Local setup
+> 游戏美术提示词库：浏览效果，复制即用。
 
-Install the project dependencies:
+为角色、场景、原画、UI、特效与 3D 美术整理的可复用提示词。每条提示词都配有参考效果；进入网站即可展开全文并一键复制。
 
-```bash
-npm install
-```
+## 浏览分类
 
-Create a local environment file from the template:
+- 角色设计
+- 场景设计
+- 原画设计
+- UI / UX 美术
+- 动画与特效
+- 3D 建模 / 贴图 / 渲染
 
-```bash
-cp .env.example .env.local
-```
+## 精选提示词与效果
 
-Set `FEISHU_BASE_TOKEN`, `FEISHU_TABLE_ID`, and `GITHUB_REPOSITORY_URL` in `.env.local`.
-Use the canonical repository URL for `GITHUB_REPOSITORY_URL`; it is rendered as the About-page
-link and is not a secret. You must also have an authenticated `lark-cli` available locally.
-`npm run sync:feishu` loads `.env.local` automatically. Keep secret values local:
-`.env.local` must never be committed.
+| 效果 | 提示词 | 用途 |
+| --- | --- | --- |
+| ![经典四视图](./public/generated/prompt-assets/recvs8dvb0f3js-0.png) | [经典四视图](./src/generated/prompts.json) | 统一比例与材质的角色建模参考。 |
+| ![角色设定拆解](./public/generated/prompt-assets/recvs8iqmi2rst-0.png) | [角色设定拆解](./src/generated/prompts.json) | 一页展示发型、服装、道具与表情。 |
+| ![白模渲染](./public/generated/prompt-assets/recvs8iyr2igzf-0.png) | [白模渲染](./src/generated/prompts.json) | 将白模转为照片级材质与灯光效果。 |
+| ![3D 建筑轴测图](./public/generated/prompt-assets/recvs8jqvd2val-0.png) | [3D 建筑轴测图](./src/generated/prompts.json) | 以等轴测角度清晰呈现建筑结构。 |
 
-## Local workflow
+## 使用方式
 
-Synchronize the current Feishu Base records and attachments into generated site content:
+1. 在网站按分类浏览效果。
+2. 展开提示词，确认它适合你的素材与目标。
+3. 点击“复制提示词”，粘贴到你使用的图像模型中，再按项目需求调整。
 
-```bash
-npm run sync:feishu
-```
+提示词原文保留创作时的语言与细节；请结合自己的参考图、模型能力和商用要求使用。
 
-Start the local development server:
+## 一起补充
 
-```bash
-npm run dev
-```
-
-Run the unit tests:
-
-```bash
-npm run test
-```
-
-Run the browser tests:
-
-```bash
-npm run test:e2e
-```
-
-Build the static site:
-
-```bash
-npm run build
-```
-
-To publish an update, edit the Feishu Base, run the sync command, review the generated
-content, run the tests, commit the resulting changes, and push them.
-
-## GitHub Pages deployment
-
-Before the first deployment, push this repository to GitHub. In the repository, open
-**Settings > Pages** and select **GitHub Actions** as the publishing source. Pushes to
-`master` then run the deployment workflow; use the GitHub Pages URL shown by that workflow
-after it completes.
-
-Content changes are prepared locally: synchronize Feishu, review the generated content, run
-the unit and browser tests, commit the reviewed changes, and push them to `master`. The
-deployment workflow does not synchronize Feishu or use local credentials.
+欢迎提交经过实际验证的游戏美术提示词和对应效果图。请说明适用场景，并保留足够的上下文，让其他创作者也能复现和改造。

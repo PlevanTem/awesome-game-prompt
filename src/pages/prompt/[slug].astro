@@ -28,10 +28,10 @@ const previousPrompt = archivePrompts[promptIndex - 1];
 const nextPrompt = archivePrompts[promptIndex + 1];
 ---
 
-<BaseLayout title={`${prompt.title} - Prompt Forge`}>
+<BaseLayout title={`${prompt.title} - Awesome Game Prompts`}>
   <SiteHeader />
   <main class="prompt-detail">
-    <a class="prompt-detail__back" href={base}>BACK TO ARCHIVE</a>
+    <a class="prompt-detail__back" href={base} data-i18n-zh="返回提示词库" data-i18n-en="BACK TO LIBRARY">返回提示词库</a>
 
     <div class="prompt-detail__layout">
       <PromptGallery title={prompt.title} attachments={prompt.attachments} />
@@ -41,8 +41,8 @@ const nextPrompt = archivePrompts[promptIndex + 1];
         <h1 id="prompt-title">{prompt.title}</h1>
 
         <div class="prompt-detail__prompt-header">
-          <h2>ORIGINAL PROMPT</h2>
-          <button class="prompt-detail__copy" type="button" data-copy-prompt>COPY PROMPT +</button>
+          <h2 data-i18n-zh="原始提示词" data-i18n-en="ORIGINAL PROMPT">原始提示词</h2>
+          <button class="prompt-detail__copy" type="button" data-copy-prompt data-i18n-zh="复制提示词" data-i18n-en="COPY PROMPT">复制提示词</button>
         </div>
         <pre class="prompt-detail__prompt" data-prompt-text>{prompt.prompt}</pre>
       </section>
@@ -68,9 +68,9 @@ const nextPrompt = archivePrompts[promptIndex + 1];
     button.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(promptText);
-        button.textContent = 'COPIED';
+        button.textContent = '已复制';
       } catch {
-        button.textContent = 'SELECT TEXT';
+        button.textContent = '请手动选择';
       }
     });
   });

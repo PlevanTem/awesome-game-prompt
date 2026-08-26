@@ -4,10 +4,13 @@ const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/
 ---
 
 <header class="site-header">
-  <a class="site-header__mark" href={base}>PROMPT FORGE / 001</a>
-  <nav class="site-header__nav" aria-label="Primary navigation">
-    <a href={base}>ARCHIVE</a>
-    <a href={`${base}about/`}>ABOUT</a>
+  <a class="site-header__mark" href={base}>AWESOME GAME PROMPTS</a>
+  <nav class="site-header__nav" aria-label="Primary navigation" data-i18n-aria-zh="主导航" data-i18n-aria-en="Primary navigation">
+    <a href={base} data-i18n-zh="提示词库" data-i18n-en="PROMPTS">提示词库</a>
+    <a href={`${base}about/`} data-i18n-zh="关于" data-i18n-en="ABOUT">关于</a>
   </nav>
-  <p class="site-header__language">EN / 中文</p>
+  <div class="site-header__language" aria-label="语言切换" data-i18n-aria-zh="语言切换" data-i18n-aria-en="Language switch">
+    <button type="button" data-language-toggle data-language="zh" aria-pressed="true">中文</button>
+    <button type="button" data-language-toggle data-language="en" aria-pressed="false">EN</button>
+  </div>
 </header>

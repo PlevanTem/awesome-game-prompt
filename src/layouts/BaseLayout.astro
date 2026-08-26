@@ -1,25 +1,43 @@
 ---
 import '../styles/global.css';
 
-interface Props {
-  title?: string;
-}
-
-const { title = 'Prompt Forge' } = Astro.props;
+interface Props { title?: string; }
+const { title = 'Awesome Game Prompts' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content="A personal archive of game-art prompts maintained in Feishu Base and exported as a static site."
-    />
+    <meta name="description" content="游戏美术提示词库：浏览效果，复制即用。" />
     <title>{title}</title>
   </head>
   <body>
     <slot />
+    <script>
+      const preferenceKey = 'awesome-game-prompts-language';
+      const applyLanguage = (language) => {
+        const english = language === 'en';
+        document.documentElement.lang = english ? 'en' : 'zh-CN';
+        document.querySelectorAll('[data-i18n-zh]').forEach((element) => {
+          const value = element.dataset[english ? 'i18nEn' : 'i18nZh'];
+          if (value) element.textContent = value;
+        });
+        document.querySelectorAll('[data-i18n-aria-zh]').forEach((element) => {
+          const value = element.dataset[english ? 'i18nAriaEn' : 'i18nAriaZh'];
+          if (value) element.setAttribute('aria-label', value);
+        });
+        document.querySelectorAll('[data-language-toggle]').forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.language === language));
+        });
+      };
+      try { applyLanguage(localStorage.getItem(preferenceKey) === 'en' ? 'en' : 'zh'); } catch { applyLanguage('zh'); }
+      document.querySelectorAll('[data-language-toggle]').forEach((button) => button.addEventListener('click', () => {
+        const language = button.dataset.language === 'en' ? 'en' : 'zh';
+        try { localStorage.setItem(preferenceKey, language); } catch {}
+        applyLanguage(language);
+      }));
+    </script>
   </body>
 </html>

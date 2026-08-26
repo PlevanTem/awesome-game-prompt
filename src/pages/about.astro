@@ -1,28 +1,12 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-
 const repositoryUrl = process.env.GITHUB_REPOSITORY_URL;
-
-if (!repositoryUrl) {
-  throw new Error('Missing required environment variable: GITHUB_REPOSITORY_URL');
-}
 ---
-
-<BaseLayout title="About - Prompt Forge">
+<BaseLayout title="关于｜Awesome Game Prompts">
   <SiteHeader />
   <main class="archive-index">
-    <div class="archive-index__heading">
-      <p class="archive-index__eyebrow">ARCHIVE NOTES / 001</p>
-      <h1>ABOUT PROMPT FORGE.</h1>
-    </div>
-
-    <section class="archive-index__empty" aria-label="About Prompt Forge">
-      <p>
-        Prompt Forge is a personal archive of game-art prompts, authored and maintained in a
-        Feishu Base, then exported as a static site.
-      </p>
-      <p>The project is open-source on <a href={repositoryUrl}>GitHub</a>.</p>
-    </section>
+    <div class="archive-index__heading"><p class="archive-index__eyebrow">ABOUT</p><h1>Awesome Game Prompts</h1></div>
+    <section class="archive-index__empty" aria-label="关于 Awesome Game Prompts"><p data-i18n-zh="为游戏美术创作整理的提示词与效果参考。看见你需要的效果，复制提示词，开始创作。" data-i18n-en="A focused library of game-art prompts and visual references. Find an effect you need, copy the prompt, and start creating.">为游戏美术创作整理的提示词与效果参考。看见你需要的效果，复制提示词，开始创作。</p>{repositoryUrl && <p><a href={repositoryUrl}>GitHub</a></p>}</section>
   </main>
 </BaseLayout>

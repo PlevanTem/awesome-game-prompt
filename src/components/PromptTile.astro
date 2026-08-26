@@ -1,48 +1,32 @@
 ---
 import { categoryLabels } from '../data/categories';
 import type { GeneratedPrompt } from '../data/types';
-
-interface Props {
-  prompt: GeneratedPrompt;
-  index: number;
-}
-
+interface Props { prompt: GeneratedPrompt; index: number; }
 const { prompt, index } = Astro.props;
 const configuredBase = process.env.BASE_PATH || '/';
 const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
 const primaryCategory = prompt.categories[0];
-const categoryLabel = primaryCategory
-  ? categoryLabels[primaryCategory]
-    ? `${categoryLabels[primaryCategory]} / ${primaryCategory}`
-    : primaryCategory
-  : 'UNCATEGORIZED';
+const categoryLabel = primaryCategory ? `${categoryLabels[primaryCategory] ?? primaryCategory} / ${primaryCategory}` : '未分类';
 const firstAttachment = prompt.attachments[0];
-const assetSource = firstAttachment
-  ? `${base}${firstAttachment.replace(/^\//, '')}`
-  : undefined;
+const assetSource = firstAttachment ? `${base}${firstAttachment.replace(/^\//, '')}` : undefined;
 const sequence = String(index + 1).padStart(3, '0');
 const layout = index % 5 === 0 ? 'prompt-tile--wide' : index % 5 === 3 ? 'prompt-tile--square' : '';
+const preview = prompt.prompt.replace(/\s+/g, ' ').slice(0, 120);
 ---
-
-<article
-  class:list={['prompt-tile', layout]}
-  data-prompt-tile
-  data-categories={prompt.categories.join('|')}
-  data-category={primaryCategory}
->
-  <a class="prompt-tile__link" href={`${base}prompt/${prompt.slug}/`}>
-    {assetSource ? (
-      <img class="prompt-tile__image" src={assetSource} alt={prompt.title} loading="lazy" />
-    ) : (
-      <div class="prompt-tile__fallback" aria-hidden="true">
-        <span>{categoryLabel}</span>
-        <strong>{prompt.title}</strong>
-      </div>
-    )}
-    <span class="prompt-tile__meta">
-      <span>{sequence}</span>
-      <span>{categoryLabel}</span>
-    </span>
-    <strong class="prompt-tile__title">{prompt.title}</strong>
+<article class:list={['prompt-tile', layout]} data-prompt-tile data-categories={prompt.categories.join('|')} data-category={primaryCategory}>
+  <a class="prompt-tile__visual" href={`${base}prompt/${prompt.slug}/`} aria-label={`查看 ${prompt.title} 详情`}>
+    {assetSource ? <img class="prompt-tile__image" src={assetSource} alt={prompt.title} loading="lazy" /> : <div class="prompt-tile__fallback" aria-hidden="true"><span>{categoryLabel}</span><strong>{prompt.title}</strong></div>}
   </a>
+  <div class="prompt-tile__meta"><span>{sequence}</span><span>{categoryLabel}</span></div>
+  <div class="prompt-tile__content"><strong class="prompt-tile__title">{prompt.title}</strong><p class="prompt-tile__preview">{preview}{prompt.prompt.length > 120 ? '…' : ''}</p>
+    <details class="prompt-tile__details"><summary data-i18n-zh="展开提示词" data-i18n-en="Show prompt">展开提示词</summary><pre>{prompt.prompt}</pre></details>
+    <div class="prompt-tile__actions"><button type="button" data-copy-prompt data-prompt={prompt.prompt} data-i18n-zh="复制提示词" data-i18n-en="Copy prompt">复制提示词</button><a href={`${base}prompt/${prompt.slug}/`} data-i18n-zh="查看详情" data-i18n-en="View details">查看详情</a></div>
+  </div>
 </article>
+<script>
+  document.querySelectorAll('[data-copy-prompt]').forEach((button) => button.addEventListener('click', async () => {
+    const source = button.dataset.prompt ?? '';
+    try { await navigator.clipboard.writeText(source); button.textContent = '已复制'; setTimeout(() => { button.textContent = document.documentElement.lang === 'en' ? 'Copy prompt' : '复制提示词'; }, 1600); }
+    catch { button.textContent = document.documentElement.lang === 'en' ? 'Select text' : '请手动选择'; }
+  }));
+</script>

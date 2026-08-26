@@ -7,13 +7,13 @@ interface Props {
 
 const { promptCount } = Astro.props;
 const filters = [
-  { category: 'all', label: 'ALL' },
-  { category: '角色设计', label: 'CHARACTERS', chinese: '角色设计' },
-  { category: '场景设计', label: 'ENVIRONMENTS', chinese: '场景设计' },
-  { category: '原画设计', label: 'CONCEPT ART', chinese: '原画设计' },
-  { category: 'UI/UX 美术', label: 'UI / UX', chinese: 'UI/UX 美术' },
-  { category: '动画与特效', label: 'VFX', chinese: '动画与特效' },
-  { category: '3D建模/贴图/渲染', label: '3D', chinese: '3D建模/贴图/渲染' },
+  { category: 'all', label: '全部', english: 'ALL' },
+  { category: '角色设计', label: '角色设计', english: 'CHARACTERS', chinese: '角色设计' },
+  { category: '场景设计', label: '场景设计', english: 'ENVIRONMENTS', chinese: '场景设计' },
+  { category: '原画设计', label: '原画设计', english: 'CONCEPT ART', chinese: '原画设计' },
+  { category: 'UI/UX 美术', label: 'UI/UX 美术', english: 'UI / UX', chinese: 'UI/UX 美术' },
+  { category: '动画与特效', label: '动画与特效', english: 'VFX', chinese: '动画与特效' },
+  { category: '3D建模/贴图/渲染', label: '3D建模/贴图/渲染', english: '3D', chinese: '3D建模/贴图/渲染' },
 ] as const;
 
 const knownCategories = new Set(Object.keys(categoryLabels));
@@ -28,9 +28,9 @@ const knownCategories = new Set(Object.keys(categoryLabels));
           class="archive-controls__filter"
           data-category={filter.category}
           aria-pressed={filter.category === 'all' ? 'true' : 'false'}
-          aria-label={filter.label}
+          aria-label={filter.label} data-i18n-aria-zh={filter.label} data-i18n-aria-en={filter.english ?? filter.label}
         >
-          <span>{filter.label}</span>
+          <span data-i18n-zh={filter.label} data-i18n-en={filter.english ?? filter.label}>{filter.label}</span>
           {filter.chinese && knownCategories.has(filter.category) && (
             <small lang="zh-CN" aria-hidden="true">{filter.chinese}</small>
           )}
@@ -41,17 +41,17 @@ const knownCategories = new Set(Object.keys(categoryLabels));
   <button
     type="button"
     class="archive-controls__random"
-    data-random-prompt
+    data-random-prompt data-i18n-zh="随机查看 +" data-i18n-en="RANDOM PROMPT +"
     disabled={promptCount === 0}
   >
-    RANDOM PROMPT +
+    随机查看 +
   </button>
 </div>
 
 <script>
   const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category]'));
   const promptTiles = Array.from(document.querySelectorAll<HTMLElement>('[data-prompt-tile]'));
-  const randomButton = document.querySelector<HTMLButtonElement>('[data-random-prompt]');
+  const randomButton = document.querySelector<HTMLButtonElement>('[data-random-prompt data-i18n-zh="随机查看 +" data-i18n-en="RANDOM PROMPT +"]');
 
   const updateRandomButton = () => {
     if (randomButton) {

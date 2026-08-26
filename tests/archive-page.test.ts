@@ -29,13 +29,15 @@ describe('archive homepage', () => {
     const html = await readFile(join(process.cwd(), 'dist', 'index.html'), 'utf8');
 
     expect(html).toContain('/prompt-forge/about/');
-  });
+  }, 30_000);
 
   it('renders a generated prompt fixture in the production index', async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(ArchivePage, { props: { prompts } });
 
     expect(html).toContain('经典四视图');
+    expect(html).toContain('复制提示词');
+    expect(html).toContain('展开提示词');
     expect(html).toContain('/prompt/prompt-b0f3js/');
     expect(html).toContain('CHARACTER DESIGN');
   });
