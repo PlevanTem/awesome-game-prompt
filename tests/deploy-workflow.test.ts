@@ -7,7 +7,7 @@ const workflowPath = fileURLToPath(
 );
 
 describe('GitHub Pages deployment workflow', () => {
-  it('runs the local quality gates before deploying the repository-scoped build', async () => {
+  it('runs unit tests without browser-test dependencies before deploying the repository-scoped build', async () => {
     const workflow = await readFile(workflowPath, 'utf8');
 
     expect(workflow).toContain('branches: [master]');
@@ -21,8 +21,8 @@ describe('GitHub Pages deployment workflow', () => {
     expect(workflow).toContain('actions/deploy-pages@v5');
     expect(workflow).toContain('npm ci');
     expect(workflow).toContain('npm run test');
-    expect(workflow).toContain('npx playwright install --with-deps chromium');
-    expect(workflow).toContain('npm run test:e2e');
+    expect(workflow).not.toContain('playwright install');
+    expect(workflow).not.toContain('npm run test:e2e');
     expect(workflow).toContain('BASE_PATH: /${{ github.event.repository.name }}');
     expect(workflow).toContain('GITHUB_REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}');
     expect(workflow).toContain('npm run build');
