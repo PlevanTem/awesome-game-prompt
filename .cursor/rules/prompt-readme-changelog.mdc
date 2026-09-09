@@ -1,0 +1,13 @@
+---
+description: Keep the README changelog in sync with prompt-library additions
+alwaysApply: true
+---
+
+# Prompt additions require README changelog updates
+
+When adding, removing, or materially changing prompt-library entries, update the changelog in `README.md` in the same change set.
+
+- Add a dated, concise summary that names the affected prompts and their categories.
+- State whether new entries include result images when that affects their availability in the library.
+- Keep `README.en.md` aligned when its content is maintained alongside the Chinese README.
+- Do not rewrite older changelog entries solely for formatting.
