@@ -24,7 +24,7 @@ Every stage has an acceptance gate. The page also includes an orchestration prom
 - “Tested” means a prompt has an attached generated result. It does not guarantee stability across every model, source, or production condition.
 - Stage examples come from separate prompt records, not one end-to-end character run, so they do not prove cross-stage consistency.
 - The GPT-6 ASTRA section currently demonstrates orchestration design. Runtime, cost, success rate, and human-intervention counts still need a controlled benchmark.
-- This repository does not yet include a LICENSE. Public visibility is not permission to reuse the contents.
+- This repository is licensed under the [MIT License](./LICENSE).
 
 ## Explore by craft
 
