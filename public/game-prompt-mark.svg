@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>Awesome Game Prompts mark</title>
+  <rect width="64" height="64" rx="8" fill="#171814"/>
+  <path d="M13 23 32 13l19 10v20L32 53 13 43V23Z" stroke="#C9FF3E" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M13 23 32 34l19-11M32 34v19" stroke="#C9FF3E" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M47 8v10M42 13h10" stroke="#E55330" stroke-width="4" stroke-linecap="square"/>
+</svg>

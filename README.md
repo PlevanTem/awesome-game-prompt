@@ -37,7 +37,7 @@
 
 - 新增角色设计提示词：服饰衍生、发型衍生、年龄段衍生、体型衍生。
 - 新增 3D / 场景设计提示词：拆件创意组合。
-- 上述新增条目暂未附效果图。
+- 拆件创意组合已补充效果图；其余条目的样图以网站记录为准。
 
 ## 浏览分类
 
@@ -89,7 +89,7 @@
 | 角色设计 | 同一角色的九种个性化发型。 | [发型衍生](https://plevantem.github.io/awesome-game-prompt/prompt/hairstyle-sheet-260909/) | [<img src="./public/generated/prompt-assets/thumbnails/local-20260909-hairstyle-sheet-0.png" width="160" alt="发型衍生效果图">](https://plevantem.github.io/awesome-game-prompt/prompt/hairstyle-sheet-260909/) |
 | 角色设计 | 同一角色从幼年到老年的年龄对照。 | [年龄段衍生](https://plevantem.github.io/awesome-game-prompt/prompt/age-variants-260909/) | [<img src="./public/generated/prompt-assets/thumbnails/local-20260909-age-variants-0.png" width="160" alt="年龄段衍生效果图">](https://plevantem.github.io/awesome-game-prompt/prompt/age-variants-260909/) |
 | 角色设计 | 同一角色从极瘦到肥胖的体型变化。 | [体型衍生](https://plevantem.github.io/awesome-game-prompt/prompt/body-variants-260909/) | [<img src="./public/generated/prompt-assets/thumbnails/local-20260909-body-variants-0.jpg" width="160" alt="体型衍生效果图">](https://plevantem.github.io/awesome-game-prompt/prompt/body-variants-260909/) |
-| 3D 建模 / 贴图 / 渲染 / 场景设计 | 将素材拆件后重组为 3D 场景创意。 | [拆件创意组合](https://plevantem.github.io/awesome-game-prompt/prompt/asset-kitbash-260909/) | 待补效果图 |
+| 3D 建模 / 贴图 / 渲染 / 场景设计 | 将素材拆件后重组为 3D 场景创意。 | [拆件创意组合](https://plevantem.github.io/awesome-game-prompt/prompt/asset-kitbash-260909/) | [<img src="./public/generated/prompt-assets/local-20260910-asset-kitbash-0.png" width="160" alt="拆件创意组合效果图">](https://plevantem.github.io/awesome-game-prompt/prompt/asset-kitbash-260909/) |
 
 ## 一起补充
 

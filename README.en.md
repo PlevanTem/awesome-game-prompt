@@ -60,7 +60,7 @@ Prompt bodies remain in their original language and detail. Use them with your o
 
 - Added character-design prompts for outfit, hairstyle, age-range, and body-type variations.
 - Added a 3D / environment prompt for creative asset kitbashing.
-- These new entries currently have no result images.
+- The creative asset kitbash entry now includes a result image; the remaining coverage depends on each prompt record.
 
 ## Contribute
 

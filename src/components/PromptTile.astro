@@ -10,7 +10,13 @@ const categoryLabel = primaryCategory ? `${categoryLabels[primaryCategory] ?? pr
 const firstAttachment = prompt.attachments[0];
 const assetSource = firstAttachment ? `${base}${firstAttachment.replace(/^\//, '')}` : undefined;
 const sequence = String(index + 1).padStart(3, '0');
-const layout = index % 5 === 0 ? 'prompt-tile--wide' : index % 5 === 3 ? 'prompt-tile--square' : '';
+const layout = prompt.slug === 'asset-kitbash-260909'
+  ? 'prompt-tile--wide'
+  : index % 5 === 0
+    ? 'prompt-tile--wide'
+    : index % 5 === 3
+      ? 'prompt-tile--square'
+      : '';
 const preview = prompt.prompt.replace(/\s+/g, ' ').slice(0, 120);
 ---
 <article class:list={['prompt-tile', layout]} data-prompt-tile data-categories={prompt.categories.join('|')} data-category={primaryCategory}>

@@ -4,7 +4,10 @@ const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/
 ---
 
 <header class="site-header">
-  <a class="site-header__mark" href={base}>AWESOME GAME PROMPTS</a>
+  <a class="site-header__mark" href={base}>
+    <img class="site-header__icon" src={`${base}game-prompt-mark.svg`} width="24" height="24" alt="" aria-hidden="true" />
+    <span>AWESOME GAME PROMPTS</span>
+  </a>
   <nav class="site-header__nav" aria-label="Primary navigation" data-i18n-aria-zh="主导航" data-i18n-aria-en="Primary navigation">
     <a href={base} data-i18n-zh="提示词库" data-i18n-en="PROMPTS">提示词库</a>
     <a href={`${base}workflows/character-production/`} data-i18n-zh="工作流" data-i18n-en="WORKFLOW">工作流</a>

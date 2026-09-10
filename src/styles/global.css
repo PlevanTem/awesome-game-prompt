@@ -69,7 +69,15 @@ a:focus-visible {
 }
 
 .site-header__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   width: fit-content;
+}
+
+.site-header__icon {
+  display: block;
+  flex: 0 0 auto;
 }
 
 .site-header__nav {
@@ -409,14 +417,14 @@ a:focus-visible {
   text-align: right;
 }
 
+.prompt-tile--wide .prompt-tile__image,
+.prompt-tile--wide .prompt-tile__fallback {
+  aspect-ratio: 16 / 9;
+}
+
 @media (min-width: 760px) {
   .prompt-tile--wide {
     grid-column: span 2;
-  }
-
-  .prompt-tile--wide .prompt-tile__image,
-  .prompt-tile--wide .prompt-tile__fallback {
-    aspect-ratio: 16 / 9;
   }
 
   .prompt-tile--square .prompt-tile__image,
