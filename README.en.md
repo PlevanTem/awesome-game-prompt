@@ -2,9 +2,29 @@
 
 [中文](./README.md)
 
-> A game-art prompt library: browse the result, copy the prompt, start creating.
+> Turn AI image generation into a reviewable, reusable game-art workflow.
 
-A reusable collection for character, environment, concept art, UI, VFX, and 3D workflows. Every entry pairs a prompt with a visual reference; open the website to expand the full text and copy it in one click.
+A public collection of tested prompts and composed workflows for character, environment, concept art, UI, VFX, and 3D production. Prompt entries preserve the original text and example output; workflows add stage inputs, outputs, acceptance gates, and a final handoff manifest.
+
+[Open the site](https://plevantem.github.io/awesome-game-prompt/) · [Run the character-production workflow](https://plevantem.github.io/awesome-game-prompt/workflows/character-production/)
+
+## More than a prompt gallery
+
+One polished image does not solve the hard production questions: whether the character stays consistent across views, what a 3D artist receives, which stage failed, and which work should be rerun.
+
+The first composed workflow blueprint connects existing prompts into six stages:
+
+`source repair → design breakdown → four-view turnaround → T-pose → controlled variants → gray sculpt reference`
+
+Every stage has an acceptance gate. The page also includes an orchestration prompt for GPT-6 ASTRA and other tool-using agents. The ASTRA section is currently an executable blueprint, not a claimed end-to-end benchmark.
+
+## Evidence boundary
+
+- Example images come from prompt records already stored in this repository.
+- “Tested” means a prompt has an attached generated result. It does not guarantee stability across every model, source, or production condition.
+- Stage examples come from separate prompt records, not one end-to-end character run, so they do not prove cross-stage consistency.
+- The GPT-6 ASTRA section currently demonstrates orchestration design. Runtime, cost, success rate, and human-intervention counts still need a controlled benchmark.
+- This repository does not yet include a LICENSE. Public visibility is not permission to reuse the contents.
 
 ## Explore by craft
 
@@ -44,4 +64,6 @@ Prompt bodies remain in their original language and detail. Use them with your o
 
 ## Contribute
 
-Contributions of tested game-art prompts and their result images are welcome. Include the intended use and enough context for another creator to reproduce and adapt the outcome.
+Start with a reproducible [workflow failure report](https://github.com/PlevanTem/awesome-game-prompt/issues/new?template=workflow-failure.yml): identify the failed stage, model version, input conditions, violated acceptance gate, and retry history.
+
+The repository license has not been decided. Do not submit prompts or images that require a contribution license yet. The content contribution path will open after licensing is explicit.

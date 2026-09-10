@@ -49,9 +49,9 @@ const knownCategories = new Set(Object.keys(categoryLabels));
 </div>
 
 <script>
-  const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category]'));
+  const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.archive-controls__filter'));
   const promptTiles = Array.from(document.querySelectorAll<HTMLElement>('[data-prompt-tile]'));
-  const randomButton = document.querySelector<HTMLButtonElement>('[data-random-prompt data-i18n-zh="随机查看 +" data-i18n-en="RANDOM PROMPT +"]');
+  const randomButton = document.querySelector<HTMLButtonElement>('[data-random-prompt]');
 
   const updateRandomButton = () => {
     if (randomButton) {

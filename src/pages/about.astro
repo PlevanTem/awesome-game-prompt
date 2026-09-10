@@ -2,11 +2,12 @@
 import SiteHeader from '../components/SiteHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 const repositoryUrl = process.env.GITHUB_REPOSITORY_URL;
+const description = 'Awesome Game Prompts 是一个 AI 游戏美术工作流与实测提示词库，覆盖角色设计、概念美术、UI、特效与 3D 交接。';
 ---
-<BaseLayout title="关于｜Awesome Game Prompts">
+<BaseLayout title="关于 Awesome Game Prompts" description={description}>
   <SiteHeader />
   <main class="archive-index">
     <div class="archive-index__heading"><p class="archive-index__eyebrow">ABOUT</p><h1>Awesome Game Prompts</h1></div>
-    <section class="archive-index__empty" aria-label="关于 Awesome Game Prompts"><p data-i18n-zh="为游戏美术创作整理的提示词与效果参考。看见你需要的效果，复制提示词，开始创作。" data-i18n-en="A focused library of game-art prompts and visual references. Find an effect you need, copy the prompt, and start creating.">为游戏美术创作整理的提示词与效果参考。看见你需要的效果，复制提示词，开始创作。</p>{repositoryUrl && <p><a href={repositoryUrl}>GitHub</a></p>}</section>
+    <section class="archive-index__empty" aria-label="关于 Awesome Game Prompts"><p data-i18n-zh="一个面向实际制作环节的 AI 游戏美术工作流库。每条提示词保留原始内容与样图；组合工作流进一步给出输入、输出、验收门槛和交接清单。" data-i18n-en="A public AI game-art workflow library built around real production stages. Every prompt keeps its original text and example output; composed workflows add inputs, outputs, acceptance gates, and handoff manifests.">一个面向实际制作环节的 AI 游戏美术工作流库。每条提示词保留原始内容与样图；组合工作流进一步给出输入、输出、验收门槛和交接清单。</p>{repositoryUrl && <p><a href={repositoryUrl}>GitHub</a></p>}</section>
   </main>
 </BaseLayout>

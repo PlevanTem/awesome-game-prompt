@@ -29,6 +29,8 @@ describe('archive homepage', () => {
     const html = await readFile(join(process.cwd(), 'dist', 'index.html'), 'utf8');
 
     expect(html).toContain('/prompt-forge/about/');
+    expect(html).toContain('/prompt-forge/workflows/character-production/');
+    expect(html).toContain('rel="canonical"');
   }, 30_000);
 
   it('renders a generated prompt fixture in the production index', async () => {
@@ -40,5 +42,6 @@ describe('archive homepage', () => {
     expect(html).toContain('展开提示词');
     expect(html).toContain('/prompt/prompt-b0f3js/');
     expect(html).toContain('CHARACTER DESIGN');
+    expect(html).toContain('从一张参考图，到可绑定角色交付包');
   });
 });

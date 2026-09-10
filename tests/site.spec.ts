@@ -36,7 +36,7 @@ test('switches interface labels to English', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'EN' }).click();
 
-  await expect(page.getByRole('link', { name: 'PROMPTS' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'PROMPTS', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'CHARACTERS' })).toBeVisible();
 });
 test('updates the primary attachment from gallery controls', async ({ page }) => {
@@ -60,7 +60,7 @@ test('renders fixture pages with a visible attachment and in-viewport copy contr
   testInfo,
 ) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: '游戏美术提示词库' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '把 AI 出图变成生产流程' })).toBeVisible();
   await page.screenshot({
     path: testInfo.outputPath(`homepage-${testInfo.project.name}.png`),
     fullPage: true,

@@ -37,6 +37,7 @@ jobs:
       - name: Build static site
         env:
           BASE_PATH: /${{ github.event.repository.name }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io
           GITHUB_REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
         run: npm run build
 

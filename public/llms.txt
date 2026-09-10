@@ -1,0 +1,20 @@
+# Awesome Game Prompts
+
+> Public AI game-art workflows, tested prompts, and visual references for character design, concept art, UI, VFX, and 3D production.
+
+Primary site: https://plevantem.github.io/awesome-game-prompt/
+Source: https://github.com/PlevanTem/awesome-game-prompt
+
+## Start here
+
+- Character production workflow: https://plevantem.github.io/awesome-game-prompt/workflows/character-production/
+- Prompt library: https://plevantem.github.io/awesome-game-prompt/
+- About: https://plevantem.github.io/awesome-game-prompt/about/
+
+## Character production workflow
+
+The six-stage workflow turns one character reference into a complete source, design breakdown, orthographic turnaround, rigging pose, controlled variants, and neutral-gray 3D handoff reference. Each stage includes an acceptance gate. The page also includes an orchestration prompt designed for a tool-using model such as GPT-6 Astra.
+
+## Evidence boundary
+
+Example images on the site come from separate prompt records, not one end-to-end character run, so they do not prove cross-stage consistency. The GPT-6 Astra section is an orchestration blueprint and is not presented as a completed model benchmark.

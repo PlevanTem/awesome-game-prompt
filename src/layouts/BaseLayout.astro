@@ -1,8 +1,30 @@
 ---
 import '../styles/global.css';
 
-interface Props { title?: string; }
-const { title = 'Awesome Game Prompts' } = Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title = 'Awesome Game Prompts — AI Game Art Workflows',
+  description = 'AI game art workflows, tested prompts, and visual references for character design, concept art, UI, VFX, and 3D production.',
+  image = '/generated/prompt-assets/recvs8iwpywn1f-0.png',
+  type = 'website',
+  jsonLd,
+} = Astro.props;
+const configuredBase = process.env.BASE_PATH || '/';
+const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
+const site = Astro.site ?? new URL('https://plevantem.github.io');
+const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonicalUrl = new URL(canonicalPath, site).toString();
+const socialImageUrl = image.startsWith('http')
+  ? image
+  : new URL(`${base}${image.replace(/^\//, '')}`, site).toString();
+const serializedJsonLd = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : undefined;
 ---
 
 <!doctype html>
@@ -10,8 +32,25 @@ const { title = 'Awesome Game Prompts' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="游戏美术提示词库：浏览效果，复制即用。" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="sitemap" href={`${base}sitemap.xml`} />
+    <meta property="og:site_name" content="Awesome Game Prompts" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:alt" content="Awesome Game Prompts workflow example" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
     <title>{title}</title>
+    {serializedJsonLd && <script type="application/ld+json" set:html={serializedJsonLd} />}
   </head>
   <body>
     <slot />

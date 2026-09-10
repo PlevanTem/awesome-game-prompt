@@ -26,9 +26,26 @@ const configuredBase = process.env.BASE_PATH || '/';
 const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
 const previousPrompt = archivePrompts[promptIndex - 1];
 const nextPrompt = archivePrompts[promptIndex + 1];
+const promptSummary = prompt.prompt
+  .replace(/&#x20;/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .slice(0, 150);
+const description = `${prompt.title}：${promptSummary}${prompt.prompt.length > 150 ? '…' : ''}`;
+const absoluteUrl = (path: string) => new URL(`${base}${path.replace(/^\//, '')}`, Astro.site ?? Astro.url.origin).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: prompt.title,
+  description,
+  url: absoluteUrl(`prompt/${prompt.slug}/`),
+  image: prompt.attachments.map(absoluteUrl),
+  keywords: [...prompt.categories, 'AI game art', 'game art prompt'],
+  isPartOf: { '@type': 'CollectionPage', name: 'Awesome Game Prompts', url: absoluteUrl('/') },
+};
 ---
 
-<BaseLayout title={`${prompt.title} - Awesome Game Prompts`}>
+<BaseLayout title={`${prompt.title}｜AI 游戏美术提示词`} description={description} image={prompt.attachments[0]} type="article" jsonLd={jsonLd}>
   <SiteHeader />
   <main class="prompt-detail">
     <a class="prompt-detail__back" href={base} data-i18n-zh="返回提示词库" data-i18n-en="BACK TO LIBRARY">返回提示词库</a>

@@ -1,0 +1,76 @@
+name: Workflow failure report
+description: Report a reproducible failure in a prompt or composed workflow.
+title: "[Workflow failure] "
+labels:
+  - workflow-failure
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A useful report shows where the workflow failed and what evidence proves it. Remove private or copyrighted source material before posting.
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Failed stage
+      options:
+        - 01 — Repair the source
+        - 02 — Make the design explicit
+        - 03 — Lock the turnaround
+        - 04 — Prepare for rigging
+        - 05 — Explore controlled variants
+        - 06 — Hand off the form
+        - Standalone prompt outside this workflow
+    validations:
+      required: true
+  - type: input
+    id: prompt-url
+    attributes:
+      label: Prompt or workflow URL
+      placeholder: https://plevantem.github.io/awesome-game-prompt/...
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model and version
+      placeholder: Exact model name or snapshot, if known
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Input conditions
+      description: Describe the source type, aspect ratio, and any edits or references. Link only material you can share.
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: Observed failure
+      description: State the visible defect and the acceptance criterion it violates.
+      placeholder: The right view repeats the left-facing direction, so stage 03 fails the view-direction gate.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Include the prompt revision, settings, and retry count.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: Describe the smallest change that would make this stage pass.
+    validations:
+      required: true
+  - type: checkboxes
+    id: evidence
+    attributes:
+      label: Evidence check
+      options:
+        - label: I removed secrets and material I do not have permission to publish.
+          required: true
+        - label: This report describes a result I observed, not a hypothetical failure.
+          required: true

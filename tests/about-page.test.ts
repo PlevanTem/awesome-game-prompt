@@ -14,7 +14,7 @@ describe('about page', () => {
       const html = await container.renderToString(AboutPage);
 
       expect(html).toContain('Awesome Game Prompts');
-      expect(html).toContain('浏览效果，复制即用。');
+      expect(html).toContain('面向实际制作环节');
       expect(html).toContain(`href="${repositoryUrl}"`);
       expect(html).not.toMatch(/tested|best|marketplace|community/i);
     } finally {

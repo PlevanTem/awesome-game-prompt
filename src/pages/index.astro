@@ -6,14 +6,44 @@ import { getArchivePrompts } from '../data/archive';
 import type { GeneratedPrompt } from '../data/types';
 import BaseLayout from '../layouts/BaseLayout.astro';
 const archivePrompts = (Astro.props.prompts ?? await getArchivePrompts()) as GeneratedPrompt[];
+const configuredBase = process.env.BASE_PATH || '/';
+const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
+const description = 'AI 游戏美术工作流与实测提示词库：角色一致性、四视图、绑定姿势、概念设计、UI、特效与 3D 交接。';
+const absoluteUrl = (path: string) => new URL(`${base}${path.replace(/^\//, '')}`, Astro.site ?? Astro.url.origin).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Awesome Game Prompts',
+  description,
+  url: absoluteUrl('/'),
+  inLanguage: ['zh-CN', 'en'],
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: archivePrompts.length,
+    itemListElement: archivePrompts.map((prompt, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: prompt.title,
+      url: absoluteUrl(`prompt/${prompt.slug}/`),
+    })),
+  },
+};
 ---
-<BaseLayout title="Awesome Game Prompts｜游戏美术提示词库">
+<BaseLayout title="Awesome Game Prompts｜AI 游戏美术工作流与提示词库" description={description} jsonLd={jsonLd}>
   <SiteHeader />
   <main class="archive-index">
     <div class="archive-index__heading">
-      <p class="archive-index__eyebrow" data-i18n-zh="GAME ART / PROMPT LIBRARY" data-i18n-en="GAME ART / PROMPT LIBRARY">GAME ART / PROMPT LIBRARY</p>
-      <div><h1 data-i18n-zh="游戏美术提示词库" data-i18n-en="GAME ART PROMPTS">游戏美术提示词库</h1><p class="archive-index__intro" data-i18n-zh="浏览效果，复制即用。" data-i18n-en="Browse results. Copy and create.">浏览效果，复制即用。</p></div>
+      <p class="archive-index__eyebrow" data-i18n-zh="OPEN GAME ART WORKFLOWS" data-i18n-en="OPEN GAME ART WORKFLOWS">OPEN GAME ART WORKFLOWS</p>
+      <div><h1 data-i18n-zh="把 AI 出图变成生产流程" data-i18n-en="TURN AI ART INTO A WORKFLOW">把 AI 出图变成生产流程</h1><p class="archive-index__intro" data-i18n-zh="从角色一致性到 3D 交接：看结果、跑流程、复制实测提示词。" data-i18n-en="From character consistency to 3D handoff: inspect results, run the workflow, and copy tested prompts.">从角色一致性到 3D 交接：看结果、跑流程、复制实测提示词。</p></div>
     </div>
+    <section class="featured-workflow" aria-labelledby="featured-workflow-title">
+      <p class="archive-index__eyebrow">FEATURED / 6-STAGE BLUEPRINT</p>
+      <div>
+        <h2 id="featured-workflow-title" data-i18n-zh="从一张参考图，到可绑定角色交付包" data-i18n-en="FROM ONE REFERENCE TO A RIG-READY CHARACTER PACK">从一张参考图，到可绑定角色交付包</h2>
+        <p data-i18n-zh="补全素材 → 设计拆解 → 四视图 → T Pose → 可控变体 → 灰模参考。每一步都有验收门槛，也提供 GPT-6 ASTRA 编排提示。" data-i18n-en="Repair → design breakdown → turnaround → T-pose → controlled variants → gray sculpt reference. Every stage has an acceptance gate and an ASTRA orchestration prompt.">补全素材 → 设计拆解 → 四视图 → T Pose → 可控变体 → 灰模参考。每一步都有验收门槛，也提供 GPT-6 ASTRA 编排提示。</p>
+        <a href={`${base}workflows/character-production/`} data-i18n-zh="打开工作流 →" data-i18n-en="OPEN THE WORKFLOW →">打开工作流 →</a>
+      </div>
+    </section>
     <ArchiveControls promptCount={archivePrompts.length} />
     {archivePrompts.length > 0 ? <section class="prompt-grid" aria-label="提示词库" data-i18n-aria-zh="提示词库" data-i18n-aria-en="Prompt library">{archivePrompts.map((prompt, index) => <PromptTile prompt={prompt} index={index} />)}</section> : <p class="archive-index__empty">暂无提示词。</p>}
   </main>

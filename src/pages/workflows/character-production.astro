@@ -1,0 +1,121 @@
+---
+import SiteHeader from '../../components/SiteHeader.astro';
+import { astraOrchestratorPrompt, characterProductionWorkflow as workflow } from '../../data/workflows';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const configuredBase = process.env.BASE_PATH || '/';
+const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
+const absoluteUrl = (path: string) => new URL(`${base}${path.replace(/^\//, '')}`, Astro.site ?? Astro.url.origin).toString();
+const workflowUrl = absoluteUrl(`workflows/${workflow.slug}/`);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: workflow.title,
+  alternateName: workflow.titleZh,
+  description: workflow.description,
+  url: workflowUrl,
+  inLanguage: ['zh-CN', 'en'],
+  tool: ['Image generation model', 'GPT-6 Astra or another tool-using agent'],
+  step: workflow.steps.map((step) => ({
+    '@type': 'HowToStep',
+    position: Number(step.number),
+    name: step.title,
+    text: `${step.description} Acceptance gate: ${step.gate}`,
+    url: `${workflowUrl}#step-${step.number}`,
+    image: step.image ? absoluteUrl(step.image) : undefined,
+  })),
+};
+---
+
+<BaseLayout
+  title="AI Game Character Workflow: Reference to Rig-Ready Pack"
+  description={workflow.description}
+  image={workflow.steps[2].image}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <SiteHeader />
+  <main class="workflow-page">
+    <header class="workflow-hero">
+      <p class="workflow-kicker">OPEN WORKFLOW BLUEPRINT / 6 STAGES / HUMAN CHECKPOINTS</p>
+      <h1 data-i18n-zh={workflow.titleZh} data-i18n-en={workflow.title}>{workflow.titleZh}</h1>
+      <p class="workflow-lede" data-i18n-zh={workflow.descriptionZh} data-i18n-en={workflow.description}>{workflow.descriptionZh}</p>
+      <div class="workflow-hero__actions">
+        <a href="#workflow" data-i18n-zh="查看完整流程" data-i18n-en="SEE THE WORKFLOW">查看完整流程</a>
+        <a href="#astra" data-i18n-zh="复制 ASTRA 编排提示" data-i18n-en="COPY ASTRA ORCHESTRATOR">复制 ASTRA 编排提示</a>
+      </div>
+    </header>
+
+    <section class="workflow-proof" aria-labelledby="why-workflow">
+      <div>
+        <p class="workflow-kicker">THE PROBLEM</p>
+        <h2 id="why-workflow" data-i18n-zh="漂亮的一张图，不是生产资产。" data-i18n-en="One pretty image is not a production asset.">漂亮的一张图，不是生产资产。</h2>
+      </div>
+      <div class="workflow-proof__copy">
+        <p data-i18n-zh="游戏团队真正卡住的是连续性：角色在不同视角会漂移，服饰和道具会被重画，到了建模与绑定阶段又缺少结构信息。这个流程把每一步的输入、输出和验收标准固定下来。" data-i18n-en="Game teams get blocked by continuity: identity drifts across views, clothing and props are redesigned, and modeling or rigging begins without enough structural information. This workflow fixes the input, output, and acceptance gate for every stage.">游戏团队真正卡住的是连续性：角色在不同视角会漂移，服饰和道具会被重画，到了建模与绑定阶段又缺少结构信息。这个流程把每一步的输入、输出和验收标准固定下来。</p>
+        <p class="workflow-note" data-i18n-zh="证据边界：下方样图来自不同提示词记录，并非同一角色端到端跑通，不能证明跨阶段一致性。ASTRA 部分是待实测的可执行编排蓝图。" data-i18n-en="Evidence boundary: the examples below come from separate prompt records, not one end-to-end character run, so they do not prove cross-stage consistency. The ASTRA section is an executable blueprint awaiting a controlled test.">证据边界：下方样图来自不同提示词记录，并非同一角色端到端跑通，不能证明跨阶段一致性。ASTRA 部分是待实测的可执行编排蓝图。</p>
+      </div>
+    </section>
+
+    <section id="workflow" class="workflow-steps" aria-label="Character production workflow">
+      {workflow.steps.map((step) => (
+        <article id={`step-${step.number}`} class="workflow-step">
+          <div class="workflow-step__visual">
+            {step.image && <img src={`${base}${step.image.replace(/^\//, '')}`} alt={`${step.title}: ${step.output}`} loading="lazy" />}
+            <span>{step.number}</span>
+          </div>
+          <div class="workflow-step__content">
+            <p class="workflow-kicker">STAGE {step.number}</p>
+            <h2 data-i18n-zh={step.titleZh} data-i18n-en={step.title}>{step.titleZh}</h2>
+            <p data-i18n-zh={step.descriptionZh} data-i18n-en={step.description}>{step.descriptionZh}</p>
+            <dl>
+              <div><dt>OUTPUT</dt><dd data-i18n-zh={step.outputZh} data-i18n-en={step.output}>{step.outputZh}</dd></div>
+              <div><dt>ACCEPTANCE GATE</dt><dd data-i18n-zh={step.gateZh} data-i18n-en={step.gate}>{step.gateZh}</dd></div>
+            </dl>
+            <a class="workflow-step__link" href={`${base}prompt/${step.promptSlug}/`}>OPEN PROMPT: {step.promptTitle} →</a>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <section id="astra" class="workflow-astra" aria-labelledby="astra-title">
+      <div>
+        <p class="workflow-kicker">GPT-6 ASTRA ORCHESTRATION BLUEPRINT</p>
+        <h2 id="astra-title" data-i18n-zh="让模型管流程，不只是写提示词。" data-i18n-en="Let the model manage the workflow, not only write prompts.">让模型管流程，不只是写提示词。</h2>
+        <p data-i18n-zh="适合 ASTRA 的原因是长上下文、多工具执行、异步工具调用和运行中调整要求。编排目标是保存已验收阶段，只重跑失败环节，并在关键节点等待人的美术判断。" data-i18n-en="ASTRA fits because the job needs long context, multi-tool execution, asynchronous tools, and mid-run requirement changes. The orchestration goal is to preserve accepted stages, retry only failed work, and stop for human art direction at explicit checkpoints.">适合 ASTRA 的原因是长上下文、多工具执行、异步工具调用和运行中调整要求。编排目标是保存已验收阶段，只重跑失败环节，并在关键节点等待人的美术判断。</p>
+        <p class="workflow-source"><a href="https://developers.openai.com/api/docs/guides/latest-model">GPT-6 ASTRA capabilities — official OpenAI documentation ↗</a></p>
+      </div>
+      <div class="workflow-astra__prompt">
+        <button type="button" data-copy-orchestrator data-copy-value={astraOrchestratorPrompt} data-i18n-zh="复制编排提示" data-i18n-en="COPY ORCHESTRATOR PROMPT">复制编排提示</button>
+        <pre>{astraOrchestratorPrompt}</pre>
+      </div>
+    </section>
+
+    <section class="workflow-manifest" aria-labelledby="manifest-title">
+      <p class="workflow-kicker">DEFINITION OF DONE</p>
+      <h2 id="manifest-title" data-i18n-zh="最终交付不是一张图，而是一份可审查的清单。" data-i18n-en="The final deliverable is a reviewable manifest, not one image.">最终交付不是一张图，而是一份可审查的清单。</h2>
+      <ul>
+        <li>01_COMPLETE_SOURCE.png</li>
+        <li>02_DESIGN_BREAKDOWN.png</li>
+        <li>03_ORTHOGRAPHIC_TURNAROUND.png</li>
+        <li>04_RIGGING_T_POSE.png</li>
+        <li>05_CONTROLLED_VARIANTS/</li>
+        <li>06_GRAY_SCULPT_REFERENCE.png</li>
+        <li>MANIFEST.md — prompts, source lineage, rejected defects, unresolved risks</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-orchestrator]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copyValue ?? '');
+        button.textContent = document.documentElement.lang === 'en' ? 'COPIED' : '已复制';
+      } catch {
+        button.textContent = document.documentElement.lang === 'en' ? 'SELECT TEXT' : '请手动选择';
+      }
+    });
+  });
+</script>
