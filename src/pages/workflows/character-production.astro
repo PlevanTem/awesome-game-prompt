@@ -1,7 +1,18 @@
 ---
 import SiteHeader from '../../components/SiteHeader.astro';
-import { astraOrchestratorPrompt, characterProductionWorkflow as workflow } from '../../data/workflows';
+import { characterProductionWorkflow as workflow } from '../../data/workflows';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const workflowPrompt = `执行“从角色概念设计到白模交付”工作流。
+
+开始生成前，先向我确认：角色主题与参考、衍生方向、差异幅度、每轮方案数量、最终交付目标。信息未确认时不要生成。
+
+按以下阶段依次执行：
+01 视觉调研 → 02 设计方向探索 → 03 服装与身型衍生 → 04 角色定稿 → 05 建模/绑定视图 → 06 中性白模 → 07 3D 模型验收。
+
+每轮统一汇报：STAGE、LOCKED、THIS ROUND、ASSESSMENT、DECISION NEEDED、REPLY FORMAT、NEXT AFTER APPROVAL。
+
+在视觉方向、服装方案、身型方案、角色定稿、建模结构和 3D 模型处等待我的审核；保存已确认阶段，只重跑失败或被要求修改的环节。未经确认，不进入下一阶段。`;
 
 const configuredBase = process.env.BASE_PATH || '/';
 const base = configuredBase.endsWith('/') ? configuredBase : `${configuredBase}/`;
@@ -15,53 +26,118 @@ const jsonLd = {
   description: workflow.description,
   url: workflowUrl,
   inLanguage: ['zh-CN', 'en'],
-  tool: ['Image generation model', 'GPT-6 Astra or another tool-using agent'],
+  tool: ['Image generation tool', 'Tripo AI'],
   step: workflow.steps.map((step) => ({
     '@type': 'HowToStep',
     position: Number(step.number),
     name: step.title,
-    text: `${step.description} Acceptance gate: ${step.gate}`,
+    text: `${step.description} Review gate: ${step.review}`,
     url: `${workflowUrl}#step-${step.number}`,
-    image: step.image ? absoluteUrl(step.image) : undefined,
+    image: step.images[0] ? absoluteUrl(step.images[0]) : step.model ? absoluteUrl(step.model.poster) : undefined,
   })),
 };
 ---
 
-<BaseLayout
-  title="AI Game Character Workflow: Reference to Rig-Ready Pack"
-  description={workflow.description}
-  image={workflow.steps[2].image}
-  type="article"
-  jsonLd={jsonLd}
->
+<BaseLayout title={workflow.titleZh} description={workflow.description} image={workflow.steps[0].images[0]} type="article" jsonLd={jsonLd}>
   <SiteHeader />
   <main class="workflow-page">
     <header class="workflow-hero">
-      <p class="workflow-kicker">OPEN WORKFLOW BLUEPRINT / 6 STAGES / HUMAN CHECKPOINTS</p>
+      <p class="workflow-kicker">IMAGEGEN + TRIPO AI CASE / 7 STAGES / USER REVIEW GATES</p>
       <h1 data-i18n-zh={workflow.titleZh} data-i18n-en={workflow.title}>{workflow.titleZh}</h1>
       <p class="workflow-lede" data-i18n-zh={workflow.descriptionZh} data-i18n-en={workflow.description}>{workflow.descriptionZh}</p>
       <div class="workflow-hero__actions">
-        <a href="#workflow" data-i18n-zh="查看完整流程" data-i18n-en="SEE THE WORKFLOW">查看完整流程</a>
-        <a href="#astra" data-i18n-zh="复制 ASTRA 编排提示" data-i18n-en="COPY ASTRA ORCHESTRATOR">复制 ASTRA 编排提示</a>
+        <a href="#workflow-prompt" data-i18n-zh="复制工作流提示" data-i18n-en="COPY WORKFLOW PROMPT">复制工作流提示</a>
+        <a href="#workflow" data-i18n-zh="查看案例进度" data-i18n-en="SEE CASE PROGRESS">查看案例进度</a>
       </div>
     </header>
 
-    <section class="workflow-proof" aria-labelledby="why-workflow">
-      <div>
-        <p class="workflow-kicker">THE PROBLEM</p>
-        <h2 id="why-workflow" data-i18n-zh="漂亮的一张图，不是生产资产。" data-i18n-en="One pretty image is not a production asset.">漂亮的一张图，不是生产资产。</h2>
+    <aside id="workflow-prompt" class="workflow-skill" aria-labelledby="workflow-prompt-title">
+      <div class="workflow-skill__intro">
+        <p class="workflow-kicker">ORCHESTRATION PROMPT</p>
+        <h2 id="workflow-prompt-title" data-i18n-zh="复制一条提示，按审核节点跑完整个流程。" data-i18n-en="Copy one prompt and run the full reviewed workflow.">复制一条提示，按审核节点跑完整个流程。</h2>
+        <p data-i18n-zh="生成前先确认衍生方向、差异幅度、方案数量和交付目标；执行中沿用已确认结果，并在关键设计决策处等待你确认。" data-i18n-en="Confirm derivative axes, difference amplitude, option counts, and the delivery target before generation. Accepted work carries forward, with pauses at key design decisions.">生成前先确认衍生方向、差异幅度、方案数量和交付目标；执行中沿用已确认结果，并在关键设计决策处等待你确认。</p>
+        <button type="button" data-copy-workflow data-copy-value={workflowPrompt} data-i18n-zh="复制工作流提示" data-i18n-en="COPY WORKFLOW PROMPT">复制工作流提示</button>
       </div>
-      <div class="workflow-proof__copy">
-        <p data-i18n-zh="游戏团队真正卡住的是连续性：角色在不同视角会漂移，服饰和道具会被重画，到了建模与绑定阶段又缺少结构信息。这个流程把每一步的输入、输出和验收标准固定下来。" data-i18n-en="Game teams get blocked by continuity: identity drifts across views, clothing and props are redesigned, and modeling or rigging begins without enough structural information. This workflow fixes the input, output, and acceptance gate for every stage.">游戏团队真正卡住的是连续性：角色在不同视角会漂移，服饰和道具会被重画，到了建模与绑定阶段又缺少结构信息。这个流程把每一步的输入、输出和验收标准固定下来。</p>
-        <p class="workflow-note" data-i18n-zh="证据边界：下方样图来自不同提示词记录，并非同一角色端到端跑通，不能证明跨阶段一致性。ASTRA 部分是待实测的可执行编排蓝图。" data-i18n-en="Evidence boundary: the examples below come from separate prompt records, not one end-to-end character run, so they do not prove cross-stage consistency. The ASTRA section is an executable blueprint awaiting a controlled test.">证据边界：下方样图来自不同提示词记录，并非同一角色端到端跑通，不能证明跨阶段一致性。ASTRA 部分是待实测的可执行编排蓝图。</p>
+      <details class="workflow-skill__source">
+        <summary data-i18n-zh="展开工作流提示" data-i18n-en="OPEN WORKFLOW PROMPT">展开工作流提示</summary>
+        <pre>{workflowPrompt}</pre>
+      </details>
+    </aside>
+
+    <section class="workflow-progress" aria-labelledby="progress-title">
+      <div class="workflow-progress__heading">
+        <p class="workflow-kicker">CHARACTER WORKFLOW · STAGE 07/07</p>
+        <h2 id="progress-title">WAITING FOR 3D REVIEW</h2>
+        <p class="workflow-progress__bar" aria-label="Stage 7 reached; 6 of 7 stages approved">■■■■■■■</p>
+      </div>
+      <div class="workflow-progress__card">
+        <div><h3>LOCKED</h3><p>方案 04 礼仪谋略 · Outfit C · Physique B · 二次元赛璐璐机娘 · 科幻军事 / 赛博朋克配色</p></div>
+        <div><h3>THIS ROUND</h3><p>用户使用已确认多视图在 Tripo AI 生成实际 GLB；模型已原样接入网页交互查看器。</p></div>
+        <div><h3>ASSESSMENT</h3><p><strong>LOADABLE</strong> GLB 2.0；1 个网格、1 个材质和 3 张内嵌贴图。<br /><strong>BOUNDARY</strong> 约 61.1 MB、105 万顶点、199 万三角形；无绑定、无动画，属于高模展示资产，不应直接视为引擎交付件。</p></div>
+        <div><h3>DECISION NEEDED</h3><p>旋转、缩放检查模型后，确认 3D 展示交付，或指出几何、贴图与网页性能修改项。</p></div>
+        <div><h3>REPLY FORMAT</h3><p><code>确认 3D 交付</code> / <code>修改：部位 + 目标</code></p></div>
+        <div><h3>NEXT AFTER APPROVAL</h3><p>冻结 01–07 阶段；如需上线性能，再另存网页优化版，不覆盖原始 Tripo GLB。</p></div>
       </div>
     </section>
 
-    <section id="workflow" class="workflow-steps" aria-label="Character production workflow">
+    <section class="workflow-proof" aria-labelledby="case-brief">
+      <div><p class="workflow-kicker">CASE BRIEF</p><h2 id="case-brief" data-i18n-zh="雅典娜神话意象，转译为原创机械少女战士。" data-i18n-en="Translate Athena's mythology into an original mecha warrior.">雅典娜神话意象，转译为原创机械少女战士。</h2></div>
+      <div class="workflow-proof__copy"><p data-i18n-zh="固定识别锚点：成年女性、深蓝编织线缆发束、猫头鹰传感器冠、象牙白陶瓷装甲、旧青铜骨架、深海军蓝软甲、琥珀灯、圆形神盾、可变形长矛和左肩短披风。" data-i18n-en="Identity anchors: adult woman, cobalt braided cable hair, owl-sensor crown, ivory ceramic armor, aged bronze frame, deep-navy under-suit, amber lights, round aegis shield, transforming spear, and a short left-shoulder cape.">固定识别锚点：成年女性、深蓝编织线缆发束、猫头鹰传感器冠、象牙白陶瓷装甲、旧青铜骨架、深海军蓝软甲、琥珀灯、圆形神盾、可变形长矛和左肩短披风。</p></div>
+    </section>
+
+    <section id="workflow" class="workflow-steps" aria-label="Athena mecha character production workflow">
       {workflow.steps.map((step) => (
-        <article id={`step-${step.number}`} class="workflow-step">
+        <article id={`step-${step.number}`} data-workflow-step class:list={['workflow-step', !step.model && step.images.length === 0 && 'workflow-step--pending']}>
           <div class="workflow-step__visual">
-            {step.image && <img src={`${base}${step.image.replace(/^\//, '')}`} alt={`${step.title}: ${step.output}`} loading="lazy" />}
+            {step.model ? (
+              <div class="workflow-model-shell">
+                <model-viewer
+                  data-model-viewer
+                  data-model-src={`${base}${step.model.src.replace(/^\//, '')}`}
+                  poster={`${base}${step.model.poster.replace(/^\//, '')}`}
+                  alt={step.model.alt}
+                  camera-controls
+                  auto-rotate
+                  auto-rotate-delay="1200"
+                  rotation-per-second="12deg"
+                  shadow-intensity="1"
+                  exposure="1"
+                  loading="lazy"
+                  reveal="manual"
+                  interaction-prompt="auto"
+                  touch-action="pan-y"
+                >
+                  <button type="button" slot="poster" class="workflow-model-poster" data-load-model>
+                    <img src={`${base}${step.model.poster.replace(/^\//, '')}`} alt="" loading="lazy" />
+                    <span><strong>LOAD 3D MODEL</strong><small>61.1 MB · 点击后下载</small></span>
+                  </button>
+                  <div slot="progress-bar" class="workflow-model-progress" data-model-progress hidden>
+                    <span data-model-progress-label>LOADING 0%</span>
+                    <i data-model-progress-bar></i>
+                  </div>
+                </model-viewer>
+                <div class="workflow-model-meta">
+                  <p>拖动旋转 · 滚轮或双指缩放 · 双击重新聚焦</p>
+                  <ul>{step.model.stats.map((stat) => <li>{stat}</li>)}</ul>
+                  <a class="workflow-model-download" href={`${base}${step.model.src.replace(/^\//, '')}`} download>无法渲染？下载原始 GLB</a>
+                </div>
+              </div>
+            ) : step.images.length > 0 ? (
+              <div class:list={['workflow-step__gallery', step.images.length > 2 && 'workflow-step__gallery--carousel']} data-gallery={step.images.length > 2 ? '' : undefined}>
+                {step.images.map((image, index) => (
+                  <figure data-gallery-slide={step.images.length > 2 ? '' : undefined} hidden={step.images.length > 2 && index !== 0} aria-hidden={step.images.length > 2 ? String(index !== 0) : undefined}>
+                    <img src={`${base}${image.replace(/^\//, '')}`} alt={`${step.title}: ${step.output} ${index + 1}`} loading={step.number === '01' ? 'eager' : 'lazy'} />
+                  </figure>
+                ))}
+                {step.images.length > 2 && (
+                  <div class="workflow-step__gallery-controls">
+                    <button type="button" data-gallery-prev aria-label="Previous image">←</button>
+                    <output data-gallery-status aria-live="polite">1 / {step.images.length}</output>
+                    <button type="button" data-gallery-next aria-label="Next image">→</button>
+                  </div>
+                )}
+              </div>
+            ) : <div class="workflow-step__pending"><span>PENDING</span><strong data-i18n-zh="尚未生成" data-i18n-en="NOT GENERATED">尚未生成</strong></div>}
             <span>{step.number}</span>
           </div>
           <div class="workflow-step__content">
@@ -71,50 +147,110 @@ const jsonLd = {
             <dl>
               <div><dt>OUTPUT</dt><dd data-i18n-zh={step.outputZh} data-i18n-en={step.output}>{step.outputZh}</dd></div>
               <div><dt>ACCEPTANCE GATE</dt><dd data-i18n-zh={step.gateZh} data-i18n-en={step.gate}>{step.gateZh}</dd></div>
+              <div class="workflow-step__review"><dt>USER REVIEW</dt><dd data-i18n-zh={step.reviewZh} data-i18n-en={step.review}>{step.reviewZh}</dd></div>
             </dl>
-            <a class="workflow-step__link" href={`${base}prompt/${step.promptSlug}/`}>OPEN PROMPT: {step.promptTitle} →</a>
+            <details class="workflow-step__prompt">
+              <summary data-i18n-zh="查看本阶段提示词" data-i18n-en="OPEN STAGE PROMPT">查看本阶段提示词</summary>
+              <button type="button" data-copy-workflow data-copy-value={step.prompt} data-i18n-zh="复制提示词" data-i18n-en="COPY PROMPT">复制提示词</button>
+              <pre>{step.prompt}</pre>
+            </details>
+            {step.options && <ol class="workflow-step__options">{step.options.map((option) => <li>{option}</li>)}</ol>}
           </div>
         </article>
       ))}
     </section>
 
-    <section id="astra" class="workflow-astra" aria-labelledby="astra-title">
-      <div>
-        <p class="workflow-kicker">GPT-6 ASTRA ORCHESTRATION BLUEPRINT</p>
-        <h2 id="astra-title" data-i18n-zh="让模型管流程，不只是写提示词。" data-i18n-en="Let the model manage the workflow, not only write prompts.">让模型管流程，不只是写提示词。</h2>
-        <p data-i18n-zh="适合 ASTRA 的原因是长上下文、多工具执行、异步工具调用和运行中调整要求。编排目标是保存已验收阶段，只重跑失败环节，并在关键节点等待人的美术判断。" data-i18n-en="ASTRA fits because the job needs long context, multi-tool execution, asynchronous tools, and mid-run requirement changes. The orchestration goal is to preserve accepted stages, retry only failed work, and stop for human art direction at explicit checkpoints.">适合 ASTRA 的原因是长上下文、多工具执行、异步工具调用和运行中调整要求。编排目标是保存已验收阶段，只重跑失败环节，并在关键节点等待人的美术判断。</p>
-        <p class="workflow-source"><a href="https://developers.openai.com/api/docs/guides/latest-model">GPT-6 ASTRA capabilities — official OpenAI documentation ↗</a></p>
-      </div>
-      <div class="workflow-astra__prompt">
-        <button type="button" data-copy-orchestrator data-copy-value={astraOrchestratorPrompt} data-i18n-zh="复制编排提示" data-i18n-en="COPY ORCHESTRATOR PROMPT">复制编排提示</button>
-        <pre>{astraOrchestratorPrompt}</pre>
-      </div>
-    </section>
-
     <section class="workflow-manifest" aria-labelledby="manifest-title">
-      <p class="workflow-kicker">DEFINITION OF DONE</p>
-      <h2 id="manifest-title" data-i18n-zh="最终交付不是一张图，而是一份可审查的清单。" data-i18n-en="The final deliverable is a reviewable manifest, not one image.">最终交付不是一张图，而是一份可审查的清单。</h2>
-      <ul>
-        <li>01_COMPLETE_SOURCE.png</li>
-        <li>02_DESIGN_BREAKDOWN.png</li>
-        <li>03_ORTHOGRAPHIC_TURNAROUND.png</li>
-        <li>04_RIGGING_T_POSE.png</li>
-        <li>05_CONTROLLED_VARIANTS/</li>
-        <li>06_GRAY_SCULPT_REFERENCE.png</li>
-        <li>MANIFEST.md — prompts, source lineage, rejected defects, unresolved risks</li>
-      </ul>
+      <p class="workflow-kicker">DELIVERY PACK</p>
+      <h2 id="manifest-title" data-i18n-zh="每个通过审核的阶段，进入同一份可追溯交付包。" data-i18n-en="Every approved stage enters one traceable delivery pack.">每个通过审核的阶段，进入同一份可追溯交付包。</h2>
+      <ul><li>01_VISUAL_RESEARCH.png</li><li>02_DIRECTION_EXPLORATION.png</li><li>03_OUTFIT_VARIANTS.png</li><li>03_PHYSIQUE_VARIANTS.png</li><li>04_FINAL_DESIGN.png</li><li>05_ORTHOGRAPHIC_VIEWS.png</li><li>05_RIGGING_T_POSE.png</li><li>05_RIGGING_A_POSE_FOUR_VIEW.png</li><li>05_RIGGING_A_POSE_FOUR_VIEW_EQUIPPED_COLOR.png</li><li>06_WHITE_MODEL.png</li><li>07_TRIPO_GENERATED_MODEL.glb</li><li>MANIFEST.md</li></ul>
     </section>
   </main>
 </BaseLayout>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>('[data-copy-orchestrator]').forEach((button) => {
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-workflow]').forEach((button) => button.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(button.dataset.copyValue ?? ''); button.textContent = document.documentElement.lang === 'en' ? 'COPIED' : '已复制'; }
+    catch { button.textContent = document.documentElement.lang === 'en' ? 'SELECT TEXT' : '请手动选择'; }
+  }));
+
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gallery) => {
+    const slides = Array.from(gallery.querySelectorAll<HTMLElement>('[data-gallery-slide]'));
+    const status = gallery.querySelector<HTMLOutputElement>('[data-gallery-status]');
+    let activeIndex = 0;
+    const show = (nextIndex: number) => {
+      activeIndex = (nextIndex + slides.length) % slides.length;
+      slides.forEach((slide, index) => {
+        const isActive = index === activeIndex;
+        slide.hidden = !isActive;
+        slide.setAttribute('aria-hidden', String(!isActive));
+      });
+      if (status) status.value = `${activeIndex + 1} / ${slides.length}`;
+    };
+    gallery.querySelector<HTMLButtonElement>('[data-gallery-prev]')?.addEventListener('click', () => show(activeIndex - 1));
+    gallery.querySelector<HTMLButtonElement>('[data-gallery-next]')?.addEventListener('click', () => show(activeIndex + 1));
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-load-model]').forEach((button) => {
+    const viewer = button.closest<HTMLElement>('[data-model-viewer]');
+    if (!viewer) return;
+    const modelSrc = viewer.dataset.modelSrc;
+    if (!modelSrc) return;
+
+    const progress = viewer.querySelector<HTMLElement>('[data-model-progress]');
+    const label = viewer.querySelector<HTMLElement>('[data-model-progress-label]');
+    const bar = viewer.querySelector<HTMLElement>('[data-model-progress-bar]');
+    const posterTitle = button.querySelector<HTMLElement>('strong');
+    const posterDetail = button.querySelector<HTMLElement>('small');
+
+    viewer.addEventListener('progress', (event) => {
+      const value = Math.round((((event as CustomEvent<{ totalProgress: number }>).detail?.totalProgress) ?? 0) * 100);
+      if (label) label.textContent = `LOADING ${value}%`;
+      if (bar) bar.style.setProperty('--model-progress', `${value}%`);
+    });
+    viewer.addEventListener('load', () => {
+      button.disabled = false;
+      button.dataset.loading = 'false';
+      if (label) label.textContent = 'MODEL READY';
+      if (bar) bar.style.setProperty('--model-progress', '100%');
+      window.setTimeout(() => progress?.setAttribute('hidden', ''), 900);
+    });
+    viewer.addEventListener('error', (event) => {
+      console.error('[3D viewer] model load failed', event);
+      button.disabled = false;
+      button.dataset.loading = 'false';
+      if (posterTitle) posterTitle.textContent = 'RETRY 3D MODEL';
+      if (posterDetail) posterDetail.textContent = '模型未加载，点击重试或下载 GLB';
+      if (label) label.textContent = 'MODEL LOAD FAILED';
+      progress?.classList.add('is-error');
+      progress?.setAttribute('hidden', '');
+      viewer.removeAttribute('src');
+      (viewer as HTMLElement & { showPoster?: () => void }).showPoster?.();
+    });
+
     button.addEventListener('click', async () => {
+      if (button.dataset.loading === 'true' || viewer.hasAttribute('src')) return;
+      button.disabled = true;
+      button.dataset.loading = 'true';
+      progress?.classList.remove('is-error');
+      progress?.removeAttribute('hidden');
+      if (label) label.textContent = 'PREPARING VIEWER';
+      if (bar) bar.style.setProperty('--model-progress', '0%');
+
       try {
-        await navigator.clipboard.writeText(button.dataset.copyValue ?? '');
-        button.textContent = document.documentElement.lang === 'en' ? 'COPIED' : '已复制';
-      } catch {
-        button.textContent = document.documentElement.lang === 'en' ? 'SELECT TEXT' : '请手动选择';
+        await import('@google/model-viewer');
+        await customElements.whenDefined('model-viewer');
+        viewer.setAttribute('src', modelSrc);
+        (viewer as HTMLElement & { dismissPoster: () => void }).dismissPoster();
+      } catch (error) {
+        console.error('[3D viewer] viewer module failed', error);
+        button.disabled = false;
+        button.dataset.loading = 'false';
+        if (posterTitle) posterTitle.textContent = 'RETRY 3D MODEL';
+        if (posterDetail) posterDetail.textContent = '查看器文件不可用，点击重试';
+        if (label) label.textContent = 'VIEWER FILES UNAVAILABLE';
+        progress?.classList.add('is-error');
+        progress?.setAttribute('hidden', '');
       }
     });
   });

@@ -13,8 +13,8 @@ Source: https://github.com/PlevanTem/awesome-game-prompt
 
 ## Character production workflow
 
-The six-stage workflow turns one character reference into a complete source, design breakdown, orthographic turnaround, rigging pose, controlled variants, and neutral-gray 3D handoff reference. Each stage includes an acceptance gate. The page also includes an orchestration prompt designed for a tool-using model such as GPT-6 Astra.
+The seven-stage Athena-inspired case preserves one character from visual research through directions, controlled outfit and physique variants, final design, modeling/rigging views, a neutral white-model reference, and interactive review of the Tripo AI GLB. The page includes a copyable workflow prompt, stage prompts, acceptance gates, and required user approvals.
 
 ## Evidence boundary
 
-Example images on the site come from separate prompt records, not one end-to-end character run, so they do not prove cross-stage consistency. The GPT-6 Astra section is an orchestration blueprint and is not presented as a completed model benchmark.
+The completed Athena stages come from one continuous image-generation run. Pending stages are not represented by unrelated archive images. White-model images are modeling references, not actual topology, rigged meshes, or engine-ready assets.

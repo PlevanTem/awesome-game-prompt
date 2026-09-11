@@ -42,6 +42,6 @@ describe('archive homepage', () => {
     expect(html).toContain('展开提示词');
     expect(html).toContain('/prompt/prompt-b0f3js/');
     expect(html).toContain('CHARACTER DESIGN');
-    expect(html).toContain('从一张参考图，到可绑定角色交付包');
+    expect(html).toContain('雅典娜机械少女：从概念研究到白模交付');
   });
 });

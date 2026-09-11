@@ -15,6 +15,9 @@ describe('about page', () => {
 
       expect(html).toContain('Awesome Game Prompts');
       expect(html).toContain('面向实际制作环节');
+      expect(html).toContain('我是布凡');
+      expect(html).toContain('lelouchdbf');
+      expect(html).toContain('https://plevantem.github.io/bufan.ux/');
       expect(html).toContain(`href="${repositoryUrl}"`);
       expect(html).not.toMatch(/tested|best|marketplace|community/i);
     } finally {

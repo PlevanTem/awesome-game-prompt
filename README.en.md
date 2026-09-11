@@ -2,28 +2,28 @@
 
 [中文](./README.md)
 
-> Turn AI image generation into a reviewable, reusable game-art workflow.
+> Turn AI image generation into a user-reviewed, traceable game-art workflow.
 
 A public collection of tested prompts and composed workflows for character, environment, concept art, UI, VFX, and 3D production. Prompt entries preserve the original text and example output; workflows add stage inputs, outputs, acceptance gates, and a final handoff manifest.
 
-[Open the site](https://plevantem.github.io/awesome-game-prompt/) · [Run the character-production workflow](https://plevantem.github.io/awesome-game-prompt/workflows/character-production/)
+[Open the site](https://plevantem.github.io/awesome-game-prompt/) · [Athena mecha: concept to white model](https://plevantem.github.io/awesome-game-prompt/workflows/character-production/)
 
 ## More than a prompt gallery
 
 One polished image does not solve the hard production questions: whether the character stays consistent across views, what a 3D artist receives, which stage failed, and which work should be rerun.
 
-The first composed workflow blueprint connects existing prompts into six stages:
+The first live case translates Athena-inspired motifs into one continuous seven-stage character workflow:
 
-`source repair → design breakdown → four-view turnaround → T-pose → controlled variants → gray sculpt reference`
+`visual research → six directions → outfit and physique variants → final design → modeling/rigging views → neutral white model → 3D review`
 
-Every stage has an acceptance gate. The page also includes an orchestration prompt for GPT-6 ASTRA and other tool-using agents. The ASTRA section is currently an executable blueprint, not a claimed end-to-end benchmark.
+The page opens with a copyable workflow prompt. Before generation it confirms derivative axes, difference amplitude, and delivery target; every turn uses one progress-report structure. The live case has approved direction 4, Outfit C, Physique B, the final design, and the modeling structure, then embeds the Tripo AI output as an interactive 3D model.
 
 ## Evidence boundary
 
 - Example images come from prompt records already stored in this repository.
 - “Tested” means a prompt has an attached generated result. It does not guarantee stability across every model, source, or production condition.
-- Stage examples come from separate prompt records, not one end-to-end character run, so they do not prove cross-stage consistency.
-- The GPT-6 ASTRA section currently demonstrates orchestration design. Runtime, cost, success rate, and human-intervention counts still need a controlled benchmark.
+- Completed Athena stages come from the same continuous character run. Pending stages are shown as pending instead of being filled with unrelated archive images.
+- The workflow delivers images for modeling handoff. A white-model image is not actual topology, a rigged mesh, or an engine asset.
 - This repository is licensed under the [MIT License](./LICENSE).
 
 ## Explore by craft
