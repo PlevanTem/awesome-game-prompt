@@ -54,6 +54,16 @@ test('opens the character workflow and copies the public workflow prompt', async
   await expect(page.getByRole('button', { name: /LOAD 3D MODEL/ })).toBeVisible();
 });
 
+test('starts downloading the 3D model when stage 07 enters the viewport', async ({ page }) => {
+  await page.goto('/workflows/character-production/');
+  const modelViewer = page.locator('[data-model-viewer]');
+  await expect(modelViewer).not.toHaveAttribute('data-auto-load-status', /.+/);
+
+  await page.locator('#step-07').scrollIntoViewIfNeeded();
+
+  await expect(modelViewer).toHaveAttribute('data-auto-load-status', /started|ready|failed/);
+});
+
 test('cycles stage 05 images without expanding the page', async ({ page }) => {
   await page.goto('/workflows/character-production/');
   const stage = page.locator('#step-05');

@@ -25,6 +25,7 @@ describe('character production workflow', () => {
     expect(html).toContain('/generated/workflows/athena-mecha/06-white-model.png');
     expect(html).toContain('/generated/workflows/athena-mecha/07-tripo-generated-model.glb');
     expect(html).toContain('data-load-model');
+    expect(html).toContain('进入本阶段自动下载');
     expect(html).toContain('data-gallery-next');
     expect(html).toContain('workflow-step__gallery--carousel');
     expect(html).toContain('下载原始 GLB');

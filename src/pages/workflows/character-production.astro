@@ -109,7 +109,7 @@ const jsonLd = {
                 >
                   <button type="button" slot="poster" class="workflow-model-poster" data-load-model>
                     <img src={`${base}${step.model.poster.replace(/^\//, '')}`} alt="" loading="lazy" />
-                    <span><strong>LOAD 3D MODEL</strong><small>61.1 MB · 点击后下载</small></span>
+                    <span><strong>LOAD 3D MODEL</strong><small>进入本阶段自动下载 · 61.1 MB</small></span>
                   </button>
                   <div slot="progress-bar" class="workflow-model-progress" data-model-progress hidden>
                     <span data-model-progress-label>LOADING 0%</span>
@@ -211,6 +211,7 @@ const jsonLd = {
     viewer.addEventListener('load', () => {
       button.disabled = false;
       button.dataset.loading = 'false';
+      viewer.dataset.autoLoadStatus = 'ready';
       if (label) label.textContent = 'MODEL READY';
       if (bar) bar.style.setProperty('--model-progress', '100%');
       window.setTimeout(() => progress?.setAttribute('hidden', ''), 900);
@@ -219,6 +220,7 @@ const jsonLd = {
       console.error('[3D viewer] model load failed', event);
       button.disabled = false;
       button.dataset.loading = 'false';
+      viewer.dataset.autoLoadStatus = 'failed';
       if (posterTitle) posterTitle.textContent = 'RETRY 3D MODEL';
       if (posterDetail) posterDetail.textContent = '模型未加载，点击重试或下载 GLB';
       if (label) label.textContent = 'MODEL LOAD FAILED';
@@ -228,10 +230,12 @@ const jsonLd = {
       (viewer as HTMLElement & { showPoster?: () => void }).showPoster?.();
     });
 
-    button.addEventListener('click', async () => {
+    const loadModel = async () => {
       if (button.dataset.loading === 'true' || viewer.hasAttribute('src')) return;
       button.disabled = true;
       button.dataset.loading = 'true';
+      viewer.dataset.autoLoadStatus = 'started';
+      if (posterTitle) posterTitle.textContent = 'LOADING 3D MODEL';
       progress?.classList.remove('is-error');
       progress?.removeAttribute('hidden');
       if (label) label.textContent = 'PREPARING VIEWER';
@@ -246,12 +250,27 @@ const jsonLd = {
         console.error('[3D viewer] viewer module failed', error);
         button.disabled = false;
         button.dataset.loading = 'false';
+        viewer.dataset.autoLoadStatus = 'failed';
         if (posterTitle) posterTitle.textContent = 'RETRY 3D MODEL';
         if (posterDetail) posterDetail.textContent = '查看器文件不可用，点击重试';
         if (label) label.textContent = 'VIEWER FILES UNAVAILABLE';
         progress?.classList.add('is-error');
         progress?.setAttribute('hidden', '');
       }
-    });
+    };
+
+    button.addEventListener('click', () => void loadModel());
+
+    const stage = viewer.closest<HTMLElement>('[data-workflow-step]');
+    if (stage && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        void loadModel();
+      }, { threshold: 0.2 });
+      observer.observe(stage);
+    } else {
+      void loadModel();
+    }
   });
 </script>
