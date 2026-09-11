@@ -25,8 +25,8 @@ const identity = `adult mechanical female warrior; calm strategic face; dark cob
 
 export const characterProductionWorkflow = {
   slug: 'character-production',
-  title: 'Athena-Inspired Mecha Character: Concept to White Model',
-  titleZh: '从角色概念设计到白模交付',
+  title: 'Athena-Inspired Mecha Character: Model Handoff',
+  titleZh: '从角色概念设计到模型交付',
   description: 'A user-reviewed image-generation workflow that preserves one character identity from myth-inspired visual research through exploration, final design, modeling views, and a neutral white-model handoff.',
   descriptionZh: '以雅典娜神话意象为起点，在人的关键确认下，把同一机械少女从视觉调研、方案探索推进到定稿、建模视图与中性白模交付。',
   steps: [

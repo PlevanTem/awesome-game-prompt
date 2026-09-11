@@ -6,7 +6,7 @@
 
 为角色、场景、原画、UI、特效与 3D 美术整理的实测提示词与组合流程。每条提示词保留原始文本和参考效果；工作流进一步定义阶段输入、输出、验收门槛和最终交付清单。
 
-[打开网站](https://plevantem.github.io/awesome-game-prompt/) · [雅典娜机械少女：概念到白模](https://plevantem.github.io/awesome-game-prompt/workflows/character-production/)
+[打开网站](https://plevantem.github.io/awesome-game-prompt/) · [雅典娜机械少女：模型交付](https://plevantem.github.io/awesome-game-prompt/workflows/character-production/)
 
 ## 不只是提示词图库
 

@@ -6,7 +6,7 @@
 
 A public collection of tested prompts and composed workflows for character, environment, concept art, UI, VFX, and 3D production. Prompt entries preserve the original text and example output; workflows add stage inputs, outputs, acceptance gates, and a final handoff manifest.
 
-[Open the site](https://plevantem.github.io/awesome-game-prompt/) · [Athena mecha: concept to white model](https://plevantem.github.io/awesome-game-prompt/workflows/character-production/)
+[Open the site](https://plevantem.github.io/awesome-game-prompt/) · [Athena mecha: model handoff](https://plevantem.github.io/awesome-game-prompt/workflows/character-production/)
 
 ## More than a prompt gallery
 

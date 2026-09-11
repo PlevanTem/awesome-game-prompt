@@ -43,9 +43,9 @@ test('switches interface labels to English', async ({ page }) => {
 test('opens the character workflow and copies the public workflow prompt', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('/workflows/character-production/');
-  await expect(page.getByRole('heading', { name: '从角色概念设计到白模交付' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '从角色概念设计到模型交付' })).toBeVisible();
   await page.getByRole('button', { name: '复制工作流提示' }).click();
-  await expect(page.evaluate(() => navigator.clipboard.readText())).resolves.toContain('执行“从角色概念设计到白模交付”工作流');
+  await expect(page.evaluate(() => navigator.clipboard.readText())).resolves.toContain('执行“从角色概念设计到模型交付”工作流');
   await expect(page.getByText('02 均衡战场指挥')).toBeVisible();
   await expect(page.getByRole('img', { name: /Deliver the neutral white model/ })).toBeVisible();
   const modelViewer = page.locator('model-viewer');
